@@ -1,0 +1,958 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../mkdocs/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>git工作流 - Shien's AI Infrastructure wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#git" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Shien&#39;s AI Infrastructure wiki" class="md-header__button md-logo" aria-label="Shien's AI Infrastructure wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Shien's AI Infrastructure wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              git工作流
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Shien&#39;s AI Infrastructure wiki" class="md-nav__button md-logo" aria-label="Shien's AI Infrastructure wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Shien's AI Infrastructure wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Infrastructure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../network/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网络基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nginx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    反向代理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    容器化部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fastapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API服务化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    日志监控
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm_api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM API接入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mkdocs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网站部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    git工作流
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 数字 key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 迁移项目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 本地开发与服务器部署的分离
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 数字 key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 迁移项目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 本地开发与服务器部署的分离
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="git">协同与版本管理：Git</h1>
+<p>随着我们的项目和开发工具IDE体量逐渐变大，IDE的更新有一定可能会导致VPS这类云端服务器的承载压力过大，导致磁盘一瞬间写满而死机。同时，我们也没法做到旧版本的回溯。在这种情况下，我们引入分布式版本控制软件Git、和代管平台Github进入我们的工作流。<a href="https://zh.wikipedia.org/zh-cn/Git">Git维基介绍</a>与<a href="https://zh.wikipedia.org/zh-tw/GitHub">Github维基介绍</a></p>
+<p>现在，我们将会把开发流程变成本地开发，然后再推送到云服务器。现在有两个project，一个是fastapi-demo，一个是之前做的wiki。我们目标是把这两个项目变成git管理的项目，改成仓库。</p>
+<p><em>Date: 2026-08-25 20:56:43</em></p>
+<hr />
+<h3 id="1-key">1. 数字 key</h3>
+<p>在linux的第一个小节SSH remote access部分，我们简单的提到了数字key：SSH常见的rsa key，和配置github的ed25519 key。这里就简单介绍一下它们要如何配置以及如何使用。</p>
+<p>为了使得本地的vscode能够远程SSH在VPS开发，我曾经生成了一把rsa key。但现在，如果要达成我们的三端协同的目的（本地- github - VPS），我们要分别在本地和VPS各生成一把ed25519 key，并把它们都录入进github里。无论是VPS还是云端，都需要重复下面的操作。</p>
+<pre><code class="language-bash">cd ~/.ssh # 进入本地的ssh文件夹
+ssh-keygen -t ed25519 -f ~/.ssh/github_ed25519 -C &quot;github&quot; # 生成key。&quot;github&quot;为我们的key name，可以根据个人偏好取能方便分辨的名字
+cat github_ed25519.pub # 得到key的具体编码
+nano config # 修改config文件
+</code></pre>
+<p>我们给config文件增加的段落如下</p>
+<pre><code class="language-bash">Host github.com
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/github_ed25519 #文件名是啥就啥，要写全路径。每一个key都要配一遍这样格式的Host
+ IdentitiesOnly yes
+</code></pre>
+<p>写完之后，<code>ctrl+S</code> 和 <code>ctrl+X</code> 保存退出。登录<a href="https://github.com/">Github</a>，进入 <strong>Setting &gt; Access &gt; SSH and GPG keys</strong>对我们的key进行录入，直接复制之前得到的key编码。（即文件<code>github_ed25519.pub</code>内容）</p>
+<p>现在进行连接测试：<code>ssh -T git@github.com</code>。第一次连接会出现下面的这些文字：</p>
+<pre><code>shien@infra01:~/.ssh$ ssh -T git@github.com
+The authenticity of host 'github.com (20.205.243.166)' can't be established.
+ED25519 key fingerprint is xxxx.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])?  # type yes here
+#...
+Hi (your github username)! You've successfully authenticated, but GitHub does not provide shell access.
+#出现这行文字即成功
+</code></pre>
+<p>另外：如果用IDE协同工作，也可以直接在IDE的account登陆自己的github账号解决同步问题。</p>
+<hr />
+<h3 id="2">2. 迁移项目</h3>
+<p>我决定把<code>wiki-docs</code>和<code>fastapi-demo</code>放在同一个仓库里，但在此之前需要现在VPS上把它们都移入同一个文件夹，最终我给它取名为<code>ai-infra</code>。在迁移完成之后:</p>
+<pre><code class="language-bash">cd ~/ai-infra
+git init # 初始化git
+</code></pre>
+<p>我们就能看到此时出现了一个<code>/.git</code>的文件夹，这便是我们本地的git仓库了。随即，我们开始写<code>.gitignore</code>文件。<code>.gitignore</code>避免让不公开文件同步到github上。虽然在github上新建仓库的时候，也可以配置自动配置<code>.gitignore</code>文件，但github所给的模板暂时不符合我们的需要，所以我们自拟一份。内容如下：</p>
+<pre><code class="language-bash"># Python
+**/.venv/
+**/__pycache__/
+**/*.pyc
+
+# Environment
+**/.env
+
+# MkDocs
+**/site/
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+
+</code></pre>
+<p>注意要特别防范<code>.env</code>文件的泄露，因为我们的AI模型的API key就放在里面。
+现在在github新建一个仓库，仓库最好与本地的仓库同名。便可以得到远程仓库URL，并在本地加上这个远程仓库：<code>git remote add origin 'repository_url'</code></p>
+<p>写完后，我们便可以进行推送：</p>
+<pre><code class="language-bash">git status #确认分支情况
+git add .
+git commit -m &quot;inital commit&quot;
+git push -u origin main
+</code></pre>
+<p>然后，我们就能在网页端的github看到我们已经同步的信息了。我们紧接着便可以将在github托管的代码拉取我们的本地：</p>
+<pre><code class="language-bash">git remote add origin git@github.com:username/repo.git
+git pull origin main
+</code></pre>
+<p>我们便完成了我们的迁移操作。</p>
+<p>随着技术的进步，现在也有更加直接的同步方式。比如下载一个<a href="https://desktop.github.com/download/">Github Desktop</a>，来省去自己输入一行行同步指令的麻烦。</p>
+<hr />
+<h3 id="3">3. 本地开发与服务器部署的分离</h3>
+<p>之前VPS同时是我们的开发环境与运行环境。在经过以上操作后，我们完成了开发环境与运行环境的分离。整条路经大致如下：</p>
+<pre><code>Local
+ |
+ | git push
+ ↓
+GitHub
+ |
+ | git pull
+ ↓
+VPS
+ |
+ | systemctl restart
+ ↓
+Production
+</code></pre>
+<p>接下来我们要配置<code>fastapi-demo</code>项目本地开发的环境依赖，我们之前已经准备好了相关文档，具体请看<a href="../docker/">docker章节</a>的第三小节。注意，我们也同时没有打包我们的虚拟环境<code>.venv</code>，所以我们也要在本地重新生成一次。完成后，我们便可以在本地进行后续的开发。</p>
+<p>不过，我们没有必要在本地模拟systemd，因为systemd是Linux生产服务管理器，不属于开发流程。</p>
+<pre><code class="language-bash">python -m venv .venv
+pip install -r requirements.txt
+uvicorn main:app --reload
+</code></pre>
+<p>在完成阶段性的开发之后，我们便通过<code>git push</code> 和<code>git pull</code>同步相应的内容。大致的git流程如下：</p>
+<ul>
+<li>本地修改代码</li>
+</ul>
+<pre><code class="language-bash">git status
+git add .
+git commit -m &quot;describe change&quot;
+git push
+</code></pre>
+<ul>
+<li>我们在VPS服务器重启服务来确认最终的运行效果</li>
+</ul>
+<pre><code class="language-bash">git pull
+sudo systemctl restart fastapi-demo
+</code></pre>
+<p>以及其他常见指令：
+- <code>git diff</code>：查看当前工作区相对于最近一次提交的修改内容，通常用于排查自己修改了哪些文件以及具体哪些代码行发生变化。
+- <code>git branch</code>：在多人开发中，往往每个人都负责其中一部分人内容。为了避免开发冲突，往往是每个人在属于自己的分支上开发并写commit递交，并由总负责人审查和合并分支。在单人开发中，也往往常用于隔离实验功能。分支的维护也很重要。不过在这里不过多作讨论。
+- <code>git status</code>：查看当前的仓库状态。日常提交代码之前通常需要该命令做个检查：确认哪些文件被修改、哪些文件已经加入暂存区、当前所在分支等等。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
