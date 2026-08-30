@@ -712,6 +712,88 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    更新日志
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -794,25 +876,31 @@
 <hr />
 <h3 id="1-llm">1. 什么是LLM？</h3>
 <p>AI（artifical intelligence，人工智能）是一个很大的概念，网络上有很多对其的介绍和科普文章，这里尤其推荐<a href="https://en.wikipedia.org/wiki/Artificial_intelligence">维基百科的英文版介绍</a>。LLM（large language model，大语言模型）是一种基于人工神经网络的语言模型，它通常采取自监督机器学习，是目前生成式AI中相当重要的模型。虽然我很想于此处介绍它精彩的Transformer机制和代数机理，但那会偏离我们的主题，然后变成一篇数学科普文章。我们暂时没必要讲清楚那些矩阵运算和训练细节。</p>
-<p>简而言之，LLM的本质是接受一串token，并根据上下文计算下一个token的概率分布，然后不断地重复这个过程形成输出。故此，从程序角度来看，一个LLM服务可以抽象成：
-- 用户输入文本→tokenizer→token 序列（输入）→模型推理（概率计算）→token 序列（输出）→转化用户可以理解的文本输出</p>
+<p>简而言之，LLM的本质是接受一串token，并根据上下文计算下一个token的概率分布，然后不断地重复这个过程形成输出。故此，从程序角度来看，一个LLM服务可以抽象成：</p>
+<ul>
+<li>用户输入文本→tokenizer→token 序列（输入）→模型推理（概率计算）→token 序列（输出）→转化用户可以理解的文本输出</li>
+</ul>
 <p>模型厂商把这套推理系统运行在自己的服务器上，再通过 HTTP API 暴露出来。故此，模型厂商的开发者用户只需申请 API key，并通过厂商提供的 API 向模型服务发送请求，将其推理能力用于自己的网络服务。</p>
 <p>我们能观察到，模型实际处理的单位并不是单词或是汉字，而是经过tokenizer翻译之后的token。因此API 通常按输入/输出 token 计费，而且不同模型、输入与输出价格可能不同。许多模型的输出 token 单价高于输入 token，但应以具体供应商定价为准。</p>
 <p>而且，我们也能注意到：模型厂商的网络聊天产品、vibe coding产品和API开发调用产品是分离的。这是因为普通用户看到的聊天网页是完整的产品，其中除了模型本身，还可能包含系统 Prompt、上下文管理、文件上传、联网、工具调用、账号权限和 UI；API 则只是厂商向开发者提供的程序接口。我们调用模型API更倾向是拿到了更接近一项底层模型能力。Coding产品也是同理：它们往往是在LLM之上再加代码库上下文、文件操作、tool calling还有agent loop这些额外的部件。一个AI工具是否好用，不仅仅取决于核心模型本身的能力，还有这些外围的配件能力。</p>
 <hr />
 <h3 id="2">2. 请求链路</h3>
-<p>接入AI模型的API后，我们的服务的请求链路也会发生变化。
-- 【旧】：<code>user → nginx → FastAPI → 业务逻辑代码组块 → Response</code>
-- 【现】：<code>user → nginx → FastAPI/chat → LLM SDK → HTTPS request → AI model(DeepSeek) API server → LLM inference → DeepSeek response → FastAPI → Response</code></p>
+<p>接入AI模型的API后，我们的服务的请求链路也会发生变化。</p>
+<ul>
+<li>【旧】：<code>user → nginx → FastAPI → 业务逻辑代码组块 → Response</code></li>
+<li>【现】：<code>user → nginx → FastAPI/chat → LLM SDK → HTTPS request → AI model(DeepSeek) API server → LLM inference → DeepSeek response → FastAPI → Response</code></li>
+</ul>
 <p>以我们现在做的<code>fastapi-demo</code>为例：之前的FastAPI基本可以自己完成业务逻辑了，但现在它变成了一个orchestration layer（编排层）——它负责接收请求、整理模型输入、调用外部推理服务、处理返回结果、记录日志并最终返回给用户。也就是说，它已经开始承担协调其他AI组件的职责了。在RAG章节中，我们还会把这个请求链路再一次延长：现有链路的<code>FastAPI → LLM</code>的部分，将会变成 <code>FastAPI → Retrieval → Context → LLM</code>。其他的AI 功能的开发也是同理，只是延长的链路部分会有所不同。</p>
 <hr />
 <h3 id="3-llm">3. 接入LLM的新问题</h3>
-<p>俗话说“说多错多”，在这里也是同理：链路越长，可能出现的问题也会越多。
-- token成本：传统function多执行几次通常不会直接产生按 token 计价的外部成本，而 LLM 每次推理都可能产生费用。故开发者需要具备token管理的意识。
-- 模型延迟：远程生成几十、几百token可能需要数秒甚至更久的操作在本地function或许才毫秒级别，所以以后才需要streaming
-- 上下文长度：并不是所有的历史信息都能无限的塞进去，输入受context window的限制。故我们有memory和RAG的方案去应对这个
-- 上游错误：服务本体正常，但因各种原因的外部LLM的服务异常导致服务异常或失败（可能的原因：超时、限流余额不足、厂商维护等）
-- 输出不稳定：传统function相同输入应该有确定行为，但因为LLM本质上是概率模型，所以生成的结果具有概率性。故HTTP 200代码只代表请求成功，并不代表回答一定符合用户需求，或格式&amp;业务上一定合格。这是AI服务和普通的CRUD服务之间的一个根本性区别。</p>
+<p>俗话说“说多错多”，在这里也是同理：链路越长，可能出现的问题也会越多。</p>
+<ul>
+<li>token成本：传统function多执行几次通常不会直接产生按 token 计价的外部成本，而 LLM 每次推理都可能产生费用。故开发者需要具备token管理的意识。</li>
+<li>模型延迟：远程生成几十、几百token可能需要数秒甚至更久的操作在本地function或许才毫秒级别，所以以后才需要streaming</li>
+<li>上下文长度：并不是所有的历史信息都能无限的塞进去，输入受context window的限制。故我们有memory和RAG的方案去应对这个</li>
+<li>上游错误：服务本体正常，但因各种原因的外部LLM的服务异常导致服务异常或失败（可能的原因：超时、限流余额不足、厂商维护等）</li>
+<li>输出不稳定：传统function相同输入应该有确定行为，但因为LLM本质上是概率模型，所以生成的结果具有概率性。故HTTP 200代码只代表请求成功，并不代表回答一定符合用户需求，或格式&amp;业务上一定合格。这是AI服务和普通的CRUD服务之间的一个根本性区别。</li>
+</ul>
 <p>而关于LLM模型的其他内容，都分布到了其他章节中去。模型的API key的管理请见<a href="../git/">git小节</a>，相应的日志设计请见<a href="../logging/">logging小节</a>，链路管理与反向代理请见<a href="../nginx/">nginx小节</a>。</p>
 
 

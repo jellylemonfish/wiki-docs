@@ -723,6 +723,88 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    更新日志
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -827,10 +909,12 @@ systemd
   ↓        journalctl -u fastapi-demo
 DeepSeek API
 </code></pre>
-<p>我们涉及了<code>logging</code>、<code>systemd journal</code> 和 <code>journalctl</code> 三个不同的角色。
-- <code>logging</code>：Python的<code>logging</code>包，我们在<code>main.py</code>自定义记录什么进日志的工具。程序通过 <code>logger.info() / logger.exception()</code> 输出
-- <code>systemd journal</code>：服务部署时，我们通过<code>logging</code>在terminal输出的日志 <code>stdout/stderr</code> 被 systemd 接走并写进 <code>journal</code>
-- <code>journalctl</code>： 只是查看 <code>journal</code> 的日志查询工具。</p>
+<p>我们涉及了<code>logging</code>、<code>systemd journal</code> 和 <code>journalctl</code> 三个不同的角色。</p>
+<ul>
+<li><code>logging</code>：Python的<code>logging</code>包，我们在<code>main.py</code>自定义记录什么进日志的工具。程序通过 <code>logger.info() / logger.exception()</code> 输出</li>
+<li><code>systemd journal</code>：服务部署时，我们通过<code>logging</code>在terminal输出的日志 <code>stdout/stderr</code> 被 systemd 接走并写进 <code>journal</code></li>
+<li><code>journalctl</code>： 只是查看 <code>journal</code> 的日志查询工具。</li>
+</ul>
 <p>在<a href="../git/">git章节</a>里，我们做了开发环境和生产环境的分离，所以日志的生产也会有一定的区别。本地开发的时候，log会直接在terminal <code>stdout</code>输出，没有经过<code>systemd journal</code>；但在生产环境时，因VPS端我们已经开放了systemd服务，它会接走我们log，就如上面所述。“生产环境中，请求链路上的 Nginx 日志、应用日志与 <code>systemd journal</code> 才会共同发挥作用。</p>
 <hr />
 <h3 id="2-fastapi">2. FastAPI 应用日志设计</h3>
@@ -875,11 +959,13 @@ def chat(request: ChatRequest):
         logger.exception(&quot;DeepSeek API request failed&quot;)
         raise
 </code></pre>
-<p>在新加的代码部分，我有几个点要特别提及。
-- <code>message_length</code> 能知道请求规模但不泄露用户原文。不必要的个人信息不要写进日志里去。
-- <code>api_duration</code> 能判断瓶颈是否来自 DeepSeek
-- token数量对应成本和上下文规模。<code>logger.exception()</code> 会在 ERROR 信息之外留下 traceback。
-- <code>total_duration</code> 代表了整个<code>/chat</code>请求从进入应用到返回结果的总耗时，可以和 api_duration 对比，判断耗时主要来自外部模型还是本地处理。</p>
+<p>在新加的代码部分，我有几个点要特别提及。</p>
+<ul>
+<li><code>message_length</code> 能知道请求规模但不泄露用户原文。不必要的个人信息不要写进日志里去。</li>
+<li><code>api_duration</code> 能判断瓶颈是否来自 DeepSeek</li>
+<li>token数量对应成本和上下文规模。<code>logger.exception()</code> 会在 ERROR 信息之外留下 traceback。</li>
+<li><code>total_duration</code> 代表了整个<code>/chat</code>请求从进入应用到返回结果的总耗时，可以和 api_duration 对比，判断耗时主要来自外部模型还是本地处理。</li>
+</ul>
 <hr />
 <h3 id="3">3. 常用命令与排查实践</h3>
 <p>我们一般在我们的云端服务器才会用到下面的指令，因为在本地开发的时候，log会输出在terminal上。</p>

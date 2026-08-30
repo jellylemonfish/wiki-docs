@@ -708,6 +708,88 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    更新日志
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -785,9 +867,11 @@
 
 
 <h1 id="shiens-ai-infrastructure-wiki">Shien's AI Infrastructure wiki</h1>
-<p>这是一个记录个人从数学+统计学背景转向AI system/ AI infracstruture 的工程实践技术文档。通过搭建完整的 AI 服务运行环境，理解从计算资源、服务部署到应用接口的整条链路。
-- github <a href="https://github.com/jellylemonfish">@jellylemonfish</a></br>
-- 简历/cv【2608更新】<!--TODO 需要搞一个文件直接下载的链接--></p>
+<p>这是一个记录个人从数学+统计学背景转向AI system/ AI infracstruture 的工程实践技术文档。通过搭建完整的 AI 服务运行环境，理解从计算资源、服务部署到应用接口的整条链路。</p>
+<ul>
+<li>github <a href="https://github.com/jellylemonfish">@jellylemonfish</a></br></li>
+<li><a href="pdf/Shien%20Zhu%20resume%20cv%E4%B8%AD%E6%96%87%202026%2008.pdf">简历/cv【2608更新】</a><!--TODO 需要搞一个文件直接下载的链接--></li>
+</ul>
 <h3 id="_1">你的这些话实在是太术语了，简单翻译一下，你这些日子到底做了什么？</h3>
 <p>我的背景主要来自数学与统计。在学习 LLM 相关理论与应用的过程中，我逐渐关注一个问题：一个模型能力如何从实验环境进入真实服务系统？<strong>如何把一个AI能力从模型调用、变成一个可以访问、运行、维护的服务？</strong> </p>
 <p>如果只是做一个AI demo，几天时间能搞定：搞一个前端页面、然后搞到一个API key，充点钱，调模型，再写一个README…… 但从demo到稳定运行的服务，我们还要处理相当多的工程问题。</p>
@@ -798,22 +882,30 @@
 <p><em>Date: 2026-08-25 21:07:59</em></p>
 <hr />
 <h3 id="_2">主要内容</h3>
-<p><strong>Foundation：</strong> （可以跳过）简单介绍一下和AI强相关的LLM的概念。十分了解的可以跳过。
-- LLM基础</p>
-<p><strong>Infrastructure：</strong> 在infrastructure章节中，我们将介绍并部署整个系统的底座，它们共同组成了我们服务的运行环境，并将服务跑起来。
-- <a href="linux/">Linux 系统环境与服务管理</a>
-- <a href="network/">网络通信与请求链路分析</a>
-- <a href="nginx/">服务入口与反向代理（Nginx）</a>
-- <a href="docker/">容器化部署（Docker）</a>
-- <a href="fastapi/">API服务化（FastAPI）</a></p>
-<p><strong>AI system：</strong> 在AI system章节中，我们将介绍如何将主流的AI模型接进我们的服务。
-- <a href="llm_api/">LLM API接入</a>
-- RAG知识库
-- 本地模型部署
-- Agent系统设计</p>
-<p><strong>Engineering：</strong> 在Engineering章节中，我们将介绍如何维护、迭代升级和对外展示我们的服务系统。
-- <a href="mkdocs/">网站部署</a>
-- <a href="git/">git工作流</a></p>
+<p><strong>Foundation：</strong> （可以跳过）简单介绍一下和AI强相关的LLM的概念。十分了解的可以跳过。</p>
+<ul>
+<li>LLM基础</li>
+</ul>
+<p><strong>Infrastructure：</strong> 在infrastructure章节中，我们将介绍并部署整个系统的底座，它们共同组成了我们服务的运行环境，并将服务跑起来。</p>
+<ul>
+<li><a href="linux/">Linux 系统环境与服务管理</a></li>
+<li><a href="network/">网络通信与请求链路分析</a></li>
+<li><a href="nginx/">服务入口与反向代理（Nginx）</a></li>
+<li><a href="docker/">容器化部署（Docker）</a></li>
+<li><a href="fastapi/">API服务化（FastAPI）</a></li>
+</ul>
+<p><strong>AI system：</strong> 在AI system章节中，我们将介绍如何将主流的AI模型接进我们的服务。</p>
+<ul>
+<li><a href="llm_api/">LLM API接入</a></li>
+<li>RAG知识库</li>
+<li>本地模型部署</li>
+<li>Agent系统设计</li>
+</ul>
+<p><strong>Engineering：</strong> 在Engineering章节中，我们将介绍如何维护、迭代升级和对外展示我们的服务系统。</p>
+<ul>
+<li><a href="mkdocs/">网站部署</a></li>
+<li><a href="git/">git工作流</a></li>
+</ul>
 <hr />
 <h3 id="_3">项目的构架图</h3>
 <p>目前本项目由两个子项目组成，分别是录入了整个工程所有技术文档的Wiki project <code>wiki-docs</code>，和作为技术主体的<code>Fastapi-demo</code>。在未来，还会增加RAG知识库与Agent的部分。</p>
