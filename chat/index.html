@@ -785,20 +785,22 @@
 
 
 <h1 id="_1">聊天页面</h1>
-<p><input id="message" type="type" placeholder="请输入消息">
+<p><input id="message" type="text" placeholder="请输入消息">
 <button onclick="sendMessage()">发送</button></p>
+<p id="answer"></p>
+
 <script>
     async function sendMessage(){
         const message = document.getElementById("message").value;
-        const response = await fetch("https://alfred-moscow-exports-casio.trycloudflare.com/chat", {
+        const response = await fetch("https://infra01.tail85a0b8.ts.net/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message:message })
         });
         const data = await response.json();
-        console.log(data.answer);
+        document.getElementById("answer").innerText = data.answer;
     }
 
 </script>
