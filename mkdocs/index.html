@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../llm_api/">
+        <link rel="prev" href="../llm-api/">
       
       
         <link rel="next" href="../git/">
@@ -458,6 +458,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -519,7 +547,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -663,18 +691,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#date-2026-08-30-160227" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Date: 2026-08-30 16:02:27
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Date: 2026-08-30 16:02:27">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -684,8 +700,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -695,8 +711,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#3-github" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -704,11 +720,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -736,6 +747,34 @@
     
   
     git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
   
 
     
@@ -865,18 +904,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#date-2026-08-30-160227" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Date: 2026-08-30 16:02:27
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Date: 2026-08-30 16:02:27">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -886,8 +913,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -897,8 +924,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#3-github" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -906,11 +933,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -934,7 +956,11 @@
 <h1 id="markdownmkdocs">从markdown到网站：mkdocs</h1>
 <p>在工程实践中，代码并不是项目的全部。随着功能不断增加，我们还需要持续记录配置、问题排查方法和设计思路。如果这些内容知识零散地存在于聊天记录、笔记或者代码注释诸如此类的地方，后续的查找和维护都会变得相当的困难。因此，我们通常会使用 Markdown 去编写结构化的工程文档：语法简单、也便于版本控制！同时，我们可以通过<code>mkdocs</code>将我们的<code>markdown</code>文档集合变成一个带有导航和搜索工具的静态网站。这样，我们既保留了 Markdown 易于编写和维护的优点，又能够以网站的形式统一展示整个项目文档，极大降低前端页面本身的维护成本。</p>
 <p>我们的<code>wiki-docs</code>项目便由<code>mkdocs</code>构建。</p>
-<h2 id="date-2026-08-30-160227"><em>Date: 2026-08-30 16:02:27</em></h2>
+<p><em>Date: 2026-08-30 16:02:27</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../llm-api/">上一节：LLM接入</a> ｜ <a href="../git/">下一节：git工作流</a> →</p>
+</blockquote>
+<hr />
 <h3 id="1">1. 安装</h3>
 <p>首先，我们先新建一个目录，作为我们的<code>wiki-docs</code>的主要位置。</p>
 <pre><code class="language-bash">cd ~
@@ -976,7 +1002,7 @@ nav:
       - 日志监控: logging.md
 
   - AI Systems:
-      - LLM API接入: llm_api.md
+      - LLM API接入: llm-api.md
 
   - Engineering:
       - git工作流: git.md

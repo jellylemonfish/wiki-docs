@@ -12,7 +12,7 @@
         <link rel="prev" href="../fastapi/">
       
       
-        <link rel="next" href="../llm_api/">
+        <link rel="next" href="../tailscale/">
       
       
         
@@ -551,6 +551,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -612,7 +640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -730,6 +758,34 @@
     
   
     git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
   
 
     
@@ -923,6 +979,9 @@
 <p>我们在之前的docker和nginx章节都有简单提到如何调取log（日志），现在讲讲为什么需要它。服务程序跑起来了，并不意味着服务可维护。</p>
 <p>当<code>curl</code>返回了错误代码，只知道失败是没有意义的，我们接下来就要排查请求到底到达了服务链条的哪一层级——就像是高中生学理科的那样，真正有用的学习不是一直刷题犯错误，而是整理错题本，明晰到底是哪里出现了问题。日志便是我们确认错误犯在哪里的好工具。</p>
 <p><em>Date: 2026-08-26 12:02:44</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../docker/">上一节：容器化部署</a> ｜ <a href="../llm-api/">下一节：LLM接入</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1">1. 日志系统</h3>
 <p>我们往往是根据服务框架来放置日志系统。就比如，根据我们现在的框架，我们的日志大概分为三级：</p>

@@ -557,6 +557,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -618,7 +646,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -736,6 +764,34 @@
     
   
     git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
   
 
     
@@ -935,6 +991,9 @@
 <p>如果想要自训练一个vLLM模型、甚至梦想参与前沿的模型开发工作，那掌握好基础的Linux知识是迈向目标的第一步。养鱼总需要鱼缸，Linux是便是相当多工程项目的鱼缸热门且可靠的品牌。所以，他自然而然便是现代 AI infrastructure的基础运行环境最优选择之一。在AI服务的部署中，Linux 负责提供计算环境、进程管理、权限控制以及服务生命周期管理。</p>
 <p>本文记录在云服务器部署服务过程中涉及的 Linux 基础知识，并涉及部分实践过程和个人兴趣产生的深入学习笔记。</p>
 <p><em>Date 2026-08-28 22:56:04</em></p>
+<blockquote>
+<p>开发顺序： <a href="../network/">下一节：网络通信</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1-linux-server-enviroment">1. Linux Server Enviroment</h3>
 <p>在实际部署 AI 服务时，通常不会直接运行在个人电脑，而是在远程 Linux 服务器上。是的，在热情澎湃地打下第一行代码之前，我们首先得租用一台远程服务器，也就是云服务厂商提供的计算实例（Compute Instance）。在这一方面，国内外自然而然有相当多的云服务器厂商。其中，国际包括：AWS（Amazon Web Services）、Google Cloud Platform（GCP）、Microsoft Azure、DigitalOcean、Vultr、Linode（Akamai Cloud）等；国内则包括阿里云、腾讯云、华为云、火山引擎、百度智能云等。不同厂商在价格、地域、网络质量、GPU 资源、控制台体验以及备案要求等方面各有差异。不过对于刚开始学习 AI 服务部署的人来说，并不需要过早纠结厂商选择：只要能够提供一台公网可访问的 Linux 计算实例，就足以完成后续绝大多数基础工程实践。

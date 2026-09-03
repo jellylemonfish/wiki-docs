@@ -458,6 +458,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -519,7 +547,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -723,10 +751,49 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 调整云服务器的相关配置
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -880,6 +947,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 调整云服务器的相关配置
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -900,7 +978,10 @@
 <h1 id="git">协同与版本管理：Git</h1>
 <p>随着我们的项目和开发工具IDE体量逐渐变大，IDE的更新有一定可能会导致VPS这类云端服务器的承载压力过大，导致磁盘一瞬间写满而死机。同时，我们也没法做到旧版本的回溯。在这种情况下，我们引入分布式版本控制软件Git、和代管平台Github进入我们的工作流。<a href="https://zh.wikipedia.org/zh-cn/Git">Git维基介绍</a>与<a href="https://zh.wikipedia.org/zh-tw/GitHub">Github维基介绍</a></p>
 <p>现在，我们将会把开发流程变成本地开发，然后再推送到云服务器。现在有两个project，一个是fastapi-demo，一个是之前做的wiki。我们目标是把这两个项目变成git管理的项目，改成仓库。</p>
-<p><em>Date: 2026-08-25 20:56:43</em></p>
+<p><em>Date: 2026-09-03 12:57:50</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../mkdocs/">上一节：网站部署</a> ｜ <a href="../tailscale/">下一节：公网访问</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1-key">1. 数字 key</h3>
 <p>在linux的第一个小节SSH remote access部分，我们简单的提到了数字key：SSH常见的rsa key，和配置github的ed25519 key。这里就简单介绍一下它们要如何配置以及如何使用。</p>
@@ -1012,6 +1093,70 @@ sudo systemctl restart fastapi-demo
 <li><code>git branch</code>：在多人开发中，往往每个人都负责其中一部分人内容。为了避免开发冲突，往往是每个人在属于自己的分支上开发并写commit递交，并由总负责人审查和合并分支。在单人开发中，也往往常用于隔离实验功能。分支的维护也很重要。不过在这里不过多作讨论。</li>
 <li><code>git status</code>：查看当前的仓库状态。日常提交代码之前通常需要该命令做个检查：确认哪些文件被修改、哪些文件已经加入暂存区、当前所在分支等等。</li>
 </ul>
+<hr />
+<h3 id="4">4. 调整云服务器的相关配置</h3>
+<p>因为我们整个项目都做了文件迁移、重新整合，所以我们需要调整云服务器的相关配置。主要是systemd和nginx的配置，以及重新搭建虚拟环境。这是因为之前的配置都指向<code>fastapi-demo</code>，这次我们希望能够指向<code>ai-infra/fastapi-demo</code>。</p>
+<p><strong>【nginx】</strong>: <code>sudo nano /etc/nginx/sites-available/default</code></p>
+<pre><code class="language-python">server{
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        server_name _;
+
+        root /var/www/wiki-docs;
+        index index.html;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+        location /api/ {
+                proxy_pass http://127.0.0.1:8000/;  
+
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarde&gt;
+                proxy_set_header X-Forwarded-Proto $scheme;
+        }
+}
+</code></pre>
+<p>这里需要进一步解释，为什么现在这个版本我们转发的<code>proxy_pass</code> 是 <code>8000/</code> 而不是 <code>8000</code>。接下来我们将要在<a href="../tailscale/">tailscale</a>章节里具体讲到，我们要给我们<code>wiki-docs</code>文档站上线聊天功能，我们故要给服务器API提供一个HTTPS的公网接口。</p>
+<p>我们fastAPI本身定义的服务是<code>/chat</code>，所以如果只是<code>8000</code>的后缀，外部网站通过<code>/api/chat</code>访问时，nginx转发会保留原始的URI（<code>http://127.0.0.1:8000/api/chat</code>），与我们在<code>fastapi-demo</code>的主程序文件里写的<code>@app.post("/chat")</code> 不兼容——<code>/api/chat</code> 终究不是 <code>\chat</code>，我们会得到404的通信报错。</p>
+<p>如果是<code>8000/</code>的情景，nginx会把匹配到的 <code>/api/</code> 这一段替换掉，故转发的URI变为<code>http://127.0.0.1:8000/chat</code>，符合我们的需求。</p>
+<p><strong>【systemd】</strong>：<code>sudo nano /etc/systemd/system/fastapi-demo.service</code></p>
+<pre><code class="language-python">[Unit]
+Description=FASTAPI Demo Service
+After=network.target
+
+[Service]
+Type=simple
+User=shien
+WorkingDirectory=/home/shien/ai-infra/fastapi-demo # 简单的改掉path
+ExecStart=/home/shien/ai-infra/fastapi-demo/.venv/bin/uvicorn main:app&gt; # 同上
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p><strong>【重建虚拟环境】</strong></p>
+<pre><code class="language-bash">deactivate 2&gt;/dev/null || true  # 先尝试退出旧虚拟环境，没有旧环境也没关系，继续往下执行
+cd ~/ai-infra/fastapi-demo
+rm -rf .venv                    # 删除虚拟环境
+python3 -m venv .venv           # 生成新虚拟环境
+source .venv/bin/activate       # 进入虚拟环境
+pip install -r requirements.txt  # 安装项目依赖
+</code></pre>
+<p><strong>【重启systemd】</strong></p>
+<pre><code class="language-python">sudo systemctl daemon-reload
+sudo systemctl restart fastapi-demo
+sudo systemctl status fastapi-demo
+</code></pre>
+<p><strong>【服务测试】</strong></p>
+<pre><code class="language-python">curl -X POST &quot;http://127.0.0.1/api/chat&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;message&quot;:&quot;hello&quot;}'
+</code></pre>
+<p>如果服务测试通过，意味着我们成功更新完了云服务器的<code>fastapi-demo</code>服务的环境配置。</p>
 
 
 

@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../logging/">
+        <link rel="prev" href="../tailscale/">
       
       
         <link rel="next" href="../mkdocs/">
@@ -458,6 +458,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -732,6 +760,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -900,6 +956,9 @@
 <h1 id="web-service-ai-servicellm-api">从 Web Service 到 AI Service：LLM API 的接入</h1>
 <p>此前的章节，我们已经完成了 FastAPI 服务、Nginx 反向代理、systemd 守护和日志系统。现在唯一新增的，便是一个外部的LLM provider。在我们自己的本地推理模型vLLM部署之前，我们先调用别人托管的模型以便于搭建完整的AI服务结构。</p>
 <p><em>Date: 2026-08-27 13:23:18</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../logging/">上一节：日志监控</a> ｜ <a href="../mkdocs/">下一节：网站部署</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1-llm">1. 什么是LLM？</h3>
 <p>AI（artifical intelligence，人工智能）是一个很大的概念，网络上有很多对其的介绍和科普文章，这里尤其推荐<a href="https://en.wikipedia.org/wiki/Artificial_intelligence">维基百科的英文版介绍</a>。LLM（large language model，大语言模型）是一种基于人工神经网络的语言模型，它通常采取自监督机器学习，是目前生成式AI中相当重要的模型。虽然我很想于此处介绍它精彩的Transformer机制和代数机理，但那会偏离我们的主题，然后变成一篇数学科普文章。我们暂时没必要讲清楚那些矩阵运算和训练细节。</p>

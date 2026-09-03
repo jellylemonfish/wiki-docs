@@ -551,6 +551,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -612,7 +640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -730,6 +758,34 @@
     
   
     git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
   
 
     
@@ -923,6 +979,9 @@
 <p>在<a href="../network/">【网络基础与请求链路】</a>小节中，我们理解了IP可以定位服务器，端口可以定位程序。但如果生产环境直接暴露了网络服务的端口的画，则会存在安全与管理问题。因此，我们需要在应用前增加一个统一的入口：<strong>Nginx</strong>。</p>
 <p>Nginx负责接收公网请求，再转发给内部应用。</p>
 <p><em>Date: 2026-08-09 22:30:00</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../network/">上一节：网络通信</a> ｜ <a href="../fastapi/">下一节：AIP服务</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1-nginx">1. 什么是nginx？</h3>
 <p>Nginx 是一个高性能 Web Server 和反向代理服务器。它主要负责直接响应HTTP请求（例如返回静态网页）和把用户请求转发给后端服务两个职责。</p>
@@ -990,6 +1049,7 @@ location / {
 <li><code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code> 记录经过了哪些代理，记录完整链路。</li>
 <li><code>proxy_set_header X-Forwarded-Proto $scheme;</code> 告诉后端，用户用的原协议是<code>HTTP</code> 还是<code>HTTPS</code> 。</li>
 </ul>
+<p>在<a href="../git/">git章节</a>，我们还会对该配置文件进行进一步的调试。</p>
 
 
 

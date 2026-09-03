@@ -551,6 +551,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -612,7 +640,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm_api/" class="md-nav__link">
+      <a href="../llm-api/" class="md-nav__link">
         
   
   
@@ -730,6 +758,34 @@
     
   
     git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat_ui.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
   
 
     
@@ -922,6 +978,9 @@
 <h1 id="apifastapi">API服务开发与部署：FastAPI</h1>
 <p>在在【反向代理与服务入口管理：Nginx】中，我们实现了公网请求经过Nginx转发到内部服务。真正处理业务逻辑的是后端应用服务。在过往的文章中，我们经常提及的server案例是FastAPI，在本文将简略介绍该服务。我们将通过其构建一个Python Web网络服务，并理解其启动、部署 排查的流程。</p>
 <p><em>Date： 2026-08-10 13:37:28</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../nginx/">上一节：反向代理</a> ｜ <a href="../docker/">下一节：容器化部署</a> →</p>
+</blockquote>
 <hr />
 <h3 id="1-fastapiuvicorn">1. 什么是FastAPI和Uvicorn</h3>
 <p>FastAPI是基于Python的现代Web框架，用于快速构建API服务。它负责定义接口路由、解析请求数据、执行对应业务逻辑，并生成响应。FastAPI本身不会监听网络端口。为了让FastAPI应用能够接收HTTP请求，需要使用ASGI服务器，例如Uvicorn。</p>

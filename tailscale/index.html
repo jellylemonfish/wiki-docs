@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../logging/">
       
       
-        <link rel="next" href="../linux/">
+        <link rel="next" href="../llm-api/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Chat - Shien's AI Infrastructure wiki</title>
+        <title>公网访问 - Shien's AI Infrastructure wiki</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#tailscale" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Chat
+              公网访问
             
           </span>
         </div>
@@ -220,19 +220,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
         
   
   
@@ -248,7 +239,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -257,18 +247,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -289,7 +281,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -472,10 +464,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../tailscale/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -491,6 +510,59 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-tailscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 为什么是 Tailscale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tailscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Tailscale与阿里云的云服务冲突
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tailscale-funnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 新建tailscale funnel
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -825,6 +897,47 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-tailscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 为什么是 Tailscale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tailscale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Tailscale与阿里云的云服务冲突
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-tailscale-funnel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 新建tailscale funnel
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -840,40 +953,97 @@
 
 
 
-<h1 id="_1">聊天页面</h1>
-<div id="chat-box"></div>
+<h1 id="tailscale">将服务暴露在公网：Tailscale</h1>
+<p>在过往的章节里，我们已经逐步让后端服务、日志这些基础设施变得稳定。现在，我们要把我们的<code>/chat</code>服务暴露在公网、并将其实装在我们的<code>wiki-docs</code>文档站上。</p>
+<p>在阅读本章节前，需要完成<strong>AI system篇</strong>的LLM 章节；<strong>Engineering篇</strong>的mkdocs和git章节。</p>
+<p><em>Date: 2026-09-03 18:02:26</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../git/">上一节：git工作流</a> ｜ <a href="../chat-ui/">下一节：Chat UI</a> →</p>
+</blockquote>
+<hr />
+<h3 id="1-tailscale">1. 为什么是 Tailscale</h3>
+<p>首先，我们要解决“服务器没有直接公网入口，怎么把 FastAPI 暴露出去”这个问题。通常来说，我们往往会使用Cloudflare；Cloudflare 本身是一整套互联网基础设施平台，包含 DNS、DDoS 防护、Tunnel 等很多东西。如果我们是通过Cloudflare来实现功能实装在网站上，大部分情景下我们会选 <code>cloudflare tunnel</code>来实现这个想法。</p>
+<p>然而，现在我存在一种情况：我ICP备案还没有下来，现在不方便正式启用自己的域名，所以我们没法通过 <code>cloudflare tunnel</code>做一个长期稳定的公网暴露的服务。因为它是把Tunnel的稳定hostname建立在用户能够控制一个cloudflare zone的前提上。所以，现在我只能更换方案：我们采取 <code>tailscale funnel</code>。</p>
+<p>Tailscale 本质上是一套基于 <a href="https://zh.wikipedia.org/wiki/WireGuard">WireGuard</a> 的虚拟私有网络工具。它先把用户的服务器、电脑、手机这些设备拉进一个只有用户自己能访问的私有网络，也就是 tailnet。这样，即使这些设备分布在不同公网、不同 NAT 后面，它们也可以像在同一个局域网里一样互相访问。而<code>tailscale funnel</code> 则是在这个私有网络基础上额外开一个公网入口，让互联网上的其他人也能访问某个服务。这个刚好提供了解决我们困境的方案。我们用在git小节里完成的Github Page当做我们的前端，<code>tailscale funnel</code>生成的<code>*.ts.net</code>作为我们HTTPS后端。换而言之，我们的暴露的形式大致为：</p>
+<pre><code class="language-python">https://jellylemonfish.github.io/wiki-docs/
+        ↓ fetch
+https://infra01.xxxxx.ts.net/chat
+        ↓ Tailscale Funnel
+http://127.0.0.1:8000/chat
+        ↓
+FastAPI → LLM
+</code></pre>
+<h3 id="2-tailscale">2. Tailscale与阿里云的云服务冲突</h3>
+<p>在完成 Tailscale安装并执行启动之后</p>
+<pre><code class="language-python">curl -fsSL https://tailscale.com/install.sh | sh 
+sudo tailscale up 
+</code></pre>
+<p>我们发现阿里云 Workbench 无法再通过 SSH 连接服务器；与此同时，服务器本身的 sshd 服务仍然正常运行，22 端口也处于监听状态。经过A/B测试发现，问题和Tailscale的丢包机制有关。查看完SSH日之后发现，阿里云Workbench来源主要是在<code>100.104.0.0/16</code>地址段。Tailscale 默认使用 RFC6598 定义的 <code>100.64.0.0/10</code> CGNAT 地址空间为 tailnet 设备分配 IPv4 地址，所以阿里云服务和tailscale的服务出现了地址空间的重叠。
+经过排查，我们能够发现，tailscale启动后会创建自己的iptables链：</p>
+<pre><code>sudo iptables -S INPUT
+sudo iptables -S ts-input
+</code></pre>
+<p>我们能看到如下规则</p>
+<pre><code class="language-bash"># shien@infra01:~$ sudo iptables -S ts-input
 
-<p><input id="message" type="text" placeholder="请输入消息">
-<button id="send-button" onclick="sendMessage()">发送</button></p>
-<p id="answer"></p>
-
-<script>
-    function addMessage(role, text){
-        const chatBox = document.getElementById("chat-box");
-
-        const messageElement = document.createElement("div");
-        messageElement.className = role;
-        messageElement.innerText = text;
-
-        chatBox.appendChild(messageElement);
-    }
-
-    async function sendMessage(){
-        const message = document.getElementById("message").value;
-
-        addMessage("user", message);
-        const response = await fetch("https://infra01.tail85a0b8.ts.net/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message:message })
-        });
-        const data = await response.json();
-        addMessage("assistant", data.answer);
-    }
-
-</script>
+-N ts-input
+-A ts-input -s 100.66.239.38/32 -i lo -j ACCEPT
+-A ts-input -i tailscale0 -j ACCEPT
+-A ts-input -p udp -m udp --dport 41641 -j ACCEPT
+-A ts-input -s 100.115.92.0/23 ! -i tailscale0 -j RETURN
+-A ts-input -s 100.64.0.0/10 ! -i tailscale0 -j DROP
+</code></pre>
+<p>最后一条规则用于防止其他网络伪造 Tailscale 的 CGNAT 地址：如果一个来源属于 100.64.0.0/10，却不是从 tailscale0 虚拟网卡进入，则直接丢弃。因为阿里云的workbench也在这一地址范围，所以因此即使流量合理，但也会被tailscale误判。</p>
+<p>我的旧方案是在tailscale的规则前增加ssh白名单，如下</p>
+<pre><code>sudo iptables -I INPUT 1 \
+    -s 100.104.0.0/16 \
+    -p tcp --dport 22 \
+    -j ACCEPT
+</code></pre>
+<p>这个办法能够解决 Workbench 的 SSH 问题，但随后（为了下载固化ip配置的<code>iptables-persistent</code>）又发现阿里云 DNS、镜像源等内部服务仍可能受到相同地址冲突影响。如果继续为每一种阿里云内部地址增加例外规则，配置会变得越来越难维护。</p>
+<p>经过检索官方文档，我决定采用tailscale 的 <code>nodivert</code> netfilter模式：tailscale会继续生成自己的<code>ts-*</code>链，但不再自动将整个系统 INPUT 流量导入这些链：</p>
+<pre><code>sudo tailscale down
+sudo tailscale up \
+    --netfilter-mode=nodivert \
+    --accept-dns=false
+ sudo iptables -A INPUT -i tailscale0 -j ts-input #决定哪个流量进入规则链
+</code></pre>
+<p>在此之后，我们重新验证<code>netfilter-mode=nodivert</code>是否生效</p>
+<pre><code>sudo iptables-S INPUT
+sudo iptables-S ts-input
+</code></pre>
+<p>如果可以，我们希望结果是：</p>
+<pre><code>-P INPUT ACCEPT
+-A INPUT -s 100.104.0.0/16 -p tcp -m tcp --dport 22 -j ACCEPT 
+# 阿里云的 100.100.x.x等都不会再经过 tailscale 那条 CGNAT DROP
+-A INPUT -i tailscale0 -j ts-input 
+# 从 tailscale0 进来的 Tailscale 流量仍然进入 ts-input
+</code></pre>
+<p>这里而不应该再自动出现<code>-A INPUT -j ts-input</code>。配置完成后，我们需要重新确认是否正常</p>
+<pre><code class="language-python">tailscale up
+tailscale status
+getent hosts mirrors.cloud.aliyuncs.com
+sudo apt update
+</code></pre>
+<p>接下来使用<code>iptables-presistent</code>固化规则</p>
+<pre><code>sudo apt install iptables-persistent
+sudo netfilter-persistent save
+sudo cat /etc/iptables/rules.v4 #确认是否写入
+</code></pre>
+<p>现在把 <code>ts-input</code> 和 <code>ts-forward</code> 这些 tailscale 动态链也一起保存进了 <code>rules.v4</code>。虽然我们理想应该是这些tailscale规则不被写入，持久化的文件只保留我们个性化的跳转和例外规则。</p>
+<h3 id="3-tailscale-funnel">3. 新建tailscale funnel</h3>
+<pre><code>sudo tailscale funnel 8000
+</code></pre>
+<p>授权成功之后，我们得到对应网址，然后我们在另一个终端进行测试</p>
+<pre><code class="language-python">curl https://infra01.xxxxxx.ts.net/
+curl -X POST &quot;https://infra01.xxxxxx.ts.net/chat&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;message&quot;:&quot;hello&quot;}'
+</code></pre>
+<p>如果这些都没有问题，我们回到原本的终端ctrl+C exit，并重新把这个tailscale funnel改成后台常驻</p>
+<pre><code class="language-python">sudo tailscale funnel --bg 8000
+tailscale funnel status # 确认tailscale funnel运行状态
+</code></pre>
 
 
 
