@@ -847,26 +847,39 @@
 <button id="send-button" onclick="sendMessage()">发送</button></p>
 <style>
     #chat-box {
-        border: 1px solid #ccc;
-        padding: 10px;
-        height: 300px;
-        overflow-y: scroll;
-        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        height: 320px;
+        overflow-y: auto;
+        margin-bottom: 12px;
+        background: #fafafa;
+    }
+
+    .user,
+    .assistant {
+        width: fit-content;
+        max-width: 75%;
+        padding: 10px 14px;
+        margin: 10px 0;
+        border-radius: 10px;
+        line-height: 1.6;
+        word-break: break-word;
     }
 
     .user {
-        text-align: right;
-        color: #4051b5;
+        margin-left: auto;
+        text-align: left;
+        color: white;
+        background: #4051b5;
     }
 
     .assistant {
+        margin-right: auto;
         text-align: left;
-        color: black;
-    }
-
-    .user, .assistant {
-        padding: 8px;
-        border-radius: 4px;
+        color: #222;
+        background: white;
+        border: 1px solid #e5e5e5;
     }
 </style>
 
