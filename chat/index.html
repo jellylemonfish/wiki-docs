@@ -843,8 +843,8 @@
 <h1 id="_1">聊天页面</h1>
 <div id="chat-box"></div>
 
-<p><input id="message" type="text" placeholder="请输入消息">
-<button id="send-button" onclick="sendMessage()">发送</button></p>
+<textarea id="message" type="text" placeholder="请输入消息"></textarea>
+<p><button id="send-button" onclick="sendMessage()">发送</button></p>
 <style>
     #chat-box {
         border: 1px solid #ddd;
@@ -935,7 +935,7 @@
         }
     }
 
-    document.getElementById("message").addEventListener("keypress", function(event){
+    document.getElementById("message").addEventListener("keydown", function(event){
         if(event.key === "Enter"){
             event.preventDefault(); // 阻止默认的回车行为
             sendMessage();
