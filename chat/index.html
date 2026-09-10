@@ -63,11 +63,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#_1" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -228,8 +223,6 @@
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
-      
-        
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
@@ -822,8 +815,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -840,17 +831,39 @@
 
 
 
-<h1 id="_1">聊天页面</h1>
-<div id="chat-box"></div>
+  <h1>Chat</h1>
 
-<textarea id="message" type="text" placeholder="请输入消息"></textarea>
-<p><button id="send-button" onclick="sendMessage()">发送</button></p>
+<div id="chat-page">
+  <div class="chat-header">聊天页面</div>
+
+  <div id="chat-box"></div>
+
+  <div class="input-wrap">
+    <textarea id="message" placeholder="请输入消息"></textarea>
+    <button id="send-button" onclick="sendMessage()">发送</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+
 <style>
+    #chat-page {
+        max-width: 900px;
+    }
+
+    .chat-header {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        color: #444;
+    }
+
     #chat-box {
         border: 1px solid #ddd;
         border-radius: 8px;
         padding: 16px;
-        height: 320px;
+        height: 58vh;
         overflow-y: auto;
         margin-bottom: 12px;
         background: #fafafa;
@@ -881,18 +894,145 @@
         background: white;
         border: 1px solid #e5e5e5;
     }
+
+    /*markdown paragraph*/
+    .assistant p {
+        margin: 0 0 10px 0;
+    }
+
+    .assistant p:last-child {
+        margin-bottom: 0;
+    }
+
+    /*markdown list*/
+    .assistant ul,
+    .assistant ol {
+        margin: 8px 0;
+        padding-left: 24px;
+    }
+
+    /*markdown inline code*/
+    .assistant code {
+        background: #f3f3f3;
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    /*markdown code block*/
+    .assistant pre {
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .assistant pre code{
+        background: none;
+        padding: 0;
+    }
+
+    /*source file boxes*/
+    .sources {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #eee;
+    }
+
+    .source-chip {
+        display: inline-block;
+        padding: 4px 9px;
+        border: 1px solid #ccd3e3;
+        border-radius: 6px;
+        background: #f5f7ff;
+        color: #4051b5;
+        font-size: 0.82rem;
+        text-decoration: none;
+    }
+
+    .source-chip:hover {
+        background: #e8ecff;
+    }
+
+    /*input area*/
+    .input-wrap {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    #message {
+        flex: 1;
+        min-height: 80px;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 8px;
+        resize: vertical;
+        box-sizing: border-box;
+    }
+
+    #send-button {
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        background: #4051b5;
+        color: white;
+        cursor: pointer;
+    }
+
+    #send-button:hover {
+        opacity: 0.9;
+    }
+
 </style>
 
 <script>
-    function addMessage(role, text){
-        const chatBox = document.getElementById("chat-box");
+    function sourceToUrl(source) {
+        if (source === "index.md") {
+            return "/wiki-docs/";
+        }
+        if (source.endsWith(".md")) {
+            return "/wiki-docs/" + source.replace(/\.md$/, "") + "/";
+        }
+        return "#";
+    }
 
+    function addMessage(role, text, sources = []){
+        const chatBox = document.getElementById("chat-box");
         const messageElement = document.createElement("div");
+
         messageElement.className = role;
-        messageElement.innerText = text;
+
+        if (role === "assistant"){
+            messageElement.innerHTML = DOMPurify.sanitize(
+                marked.parse(text)
+            );
+
+            if(sources.length > 0){
+                const sourcesElement = document.createElement("div");
+                sourcesElement.className = "sources";
+
+                sources.forEach(source => {
+                    const sourceLink = document.createElement("a");
+                    sourceLink.className = "source-chip";
+                    sourceLink.innerText = source;
+                    sourceLink.href = sourceToUrl(source);
+                    sourceLink.target = "_blank";
+
+                    sourcesElement.appendChild(sourceLink);
+                });
+                messageElement.appendChild(sourcesElement);
+            }
+
+        }else{
+                messageElement.innerText = text;
+         }
 
         chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight; // 自动滚动到底部
+            chatBox.scrollTop = chatBox.scrollHeight; // 自动滚动到底部
     }
 
     async function sendMessage(){
@@ -923,7 +1063,7 @@
             }
 
             const data = await response.json();
-            addMessage("assistant", data.answer);
+            addMessage("assistant", data.answer, data.sources || []);
 
         } catch (error){
             console.error("Error:", error);
