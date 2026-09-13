@@ -868,23 +868,447 @@
 
 
 <h1 id="chat-ui">聊天页面的端口：chat UI 设计</h1>
+<p>在本小节中，我们将介绍聊天页面的UI设计过程，通过多轮迭代逐步完善用户体验。至目前为止，我们一共有三轮认证：
+- 第一轮验证了浏览器能否成功向 FastAPI /chat 发送 JSON 请求，并把返回结果显示出来。
+- 第二轮则围绕连续对话、请求状态和异常处理做一些基础的反馈，把单次的API调用做到更完善的、最轻量的聊天引用。
+- 第三轮在RAG第一版本的开发完成之后，根据新增的功能增加了更多的视觉效果和互动优化。</p>
+<p><em>Date: 2026-09-12 15:59:31</em></p>
 <blockquote>
-<p>开发顺序：← <a href="../tailscale/">上一节：公网访问</a> ｜ </p>
+<p>开发顺序：← <a href="../tailscale/">上一节：公网访问</a> ｜ <a href="rag/index.md">下一节：RAG项目总览</a> → </p>
 </blockquote>
 <hr />
 <h3 id="1">1. 第一轮迭代</h3>
-<p>我们的目的是做出最简单的UI要求：一处能给用户输入文本的地方，一个发送文本的按钮，一处能显示聊天记录的聊天框。</p>
-<h3 id="2">2. 第二轮迭代</h3>
-<p>在第一轮的最简功能实现的基础上，我们进行进行更多的交互设计。这样，我们才不是单纯的一个输入框调用API，而是真的变成了一个最小可用的聊天应用。我们需要增加的功能如下：</p>
-<pre><code>1. 聊天记录按轮次显示，而不是永远覆盖answer
-2. 在代码主体区分 user / assistant 两种消息
-3. 发送后清空输入框
-4. 支持 Enter 发送
-5. 请求期间把按钮禁用或者显示“正在生成”或“发送中”
-6. 网络错误时显示错误信息
-7. 给聊天区域一个固定宽度和基本的气泡样式
+<p>我们的目的是让fastapi项目中写好的<code>/chat</code>功能在网页端上线。当时目标是先验证浏览器能否成功向 FastAPI /chat 发送 JSON 请求，并把返回结果显示出来。</p>
+<p>所以最初的目标是做出最简单的UI要求：一处能给用户输入文本的地方，一个发送文本的按钮，一处能显示聊天记录的聊天框。</p>
+<p>代码如下：</p>
+<details>
+<summary>点击查看代码</summary>
+
+
+<pre><code class="language-html"># 聊天页面
+
+&lt;input id=&quot;message&quot; type=&quot;text&quot; placeholder=&quot;请输入消息&quot;&gt;
+&lt;button onclick=&quot;sendMessage()&quot;&gt;发送&lt;/button&gt;
+
+&lt;p id=&quot;answer&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+    async function sendMessage(){
+        const message = document.getElementById(&quot;message&quot;).value;
+        const response = await fetch(&quot;https://infra01.xxxxxx.ts.net/chat&quot;, {
+            method: &quot;POST&quot;,
+            headers: {
+                &quot;Content-Type&quot;: &quot;application/json&quot;
+            },
+            body: JSON.stringify({ message:message })
+        });
+        const data = await response.json();
+        document.getElementById(&quot;answer&quot;).innerText = data.answer;
+    }
+
+&lt;/script&gt;
 </code></pre>
+
+
+</details>
+<p></br></p>
+<p><img src="pics/chat-ui1.png" alt="第一轮迭代聊天UI示意图"></p>
+<p>我们能够发现，它本质上还是一个验证链路的原型。它每一次回答都会覆盖上一次内容。发送后输入框的内容也不会被清空。</p>
+<h3 id="2">2. 第二轮迭代</h3>
+<p>在第一轮的最简功能实现的基础上，我们进行进行更多的交互设计。这样，我们才不是单纯的一个输入框调用API，而是真的变成了一个最小可用的聊天应用。对原型的总结，我们需要增加的功能如下：</p>
+<ol>
+<li>聊天记录按轮次显示，而不是永远覆盖answer</li>
+<li>在代码主体区分 user / assistant 两种消息</li>
+<li>发送后清空输入框</li>
+<li>支持 Enter 发送</li>
+<li>请求期间把按钮禁用或者显示“正在生成”或“发送中”</li>
+<li>网络错误时显示错误信息</li>
+<li>给聊天区域一个固定宽度和基本的气泡样式（提升更多的美术效果）</li>
+</ol>
+<details>
+<summary>点击查看第二轮迭代的代码</summary>
+
+
+<pre><code class="language-html"># 聊天页面
+
+&lt;div id=&quot;chat-box&quot;&gt;&lt;/div&gt;
+
+&lt;input id=&quot;message&quot; type=&quot;text&quot; placeholder=&quot;请输入消息&quot;&gt;
+&lt;button id=&quot;send-button&quot; onclick=&quot;sendMessage()&quot;&gt;发送&lt;/button&gt;
+
+&lt;style&gt;
+    #chat-box {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        height: 320px;
+        overflow-y: auto;
+        margin-bottom: 12px;
+        background: #fafafa;
+    }
+
+    .user,
+    .assistant {
+        width: fit-content;
+        max-width: 75%;
+        padding: 10px 14px;
+        margin: 10px 0;
+        border-radius: 10px;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .user {
+        margin-left: auto;
+        text-align: left;
+        color: white;
+        background: #4051b5;
+    }
+
+    .assistant {
+        margin-right: auto;
+        text-align: left;
+        color: #222;
+        background: white;
+        border: 1px solid #e5e5e5;
+    }
+&lt;/style&gt;
+
+&lt;script&gt;
+    function addMessage(role, text){
+        const chatBox = document.getElementById(&quot;chat-box&quot;);
+
+        const messageElement = document.createElement(&quot;div&quot;);
+        messageElement.className = role;
+        messageElement.innerText = text;
+
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight; // 自动滚动到底部
+    }
+
+    async function sendMessage(){
+        const input = document.getElementById(&quot;message&quot;);
+        const button = document.getElementById(&quot;send-button&quot;);
+
+        const message = input.value.trim();//空格无效
+
+        if(!message) return;
+
+        addMessage(&quot;user&quot;, message);
+        input.value = &quot;&quot;; //自动清空
+
+        button.disabled = true; // 禁用按钮，防止重复点击
+        button.innerText = &quot;发送中...&quot;; // 改变按钮文本
+
+        try{
+            const response = await fetch(&quot;https://infra01.xxxxxx.ts.net/chat&quot;, {
+                method: &quot;POST&quot;,
+                headers: {
+                    &quot;Content-Type&quot;: &quot;application/json&quot;
+                },
+                body: JSON.stringify({ message:message })
+             });
+
+            if(!response.ok){
+                throw new Error(&quot;网络请求失败, HTTP error: &quot;+response.status);
+            }
+
+            const data = await response.json();
+            addMessage(&quot;assistant&quot;, data.answer);
+
+        } catch (error){
+            console.error(&quot;Error:&quot;, error);
+            addMessage(&quot;assistant&quot;, &quot;请求失败，请稍后再试。&quot;);
+        } finally {
+            button.disabled = false; // 恢复按钮
+            button.innerText = &quot;发送&quot;; // 恢复按钮文本
+            input.focus(); // 重新聚焦输入框
+        }
+    }
+
+    document.getElementById(&quot;message&quot;).addEventListener(&quot;keypress&quot;, function(event){
+        if(event.key === &quot;Enter&quot;){
+            event.preventDefault(); // 阻止默认的回车行为
+            sendMessage();
+        }
+    });
+
+&lt;/script&gt;
+</code></pre>
+
+
+</details>
+
+<p><img src="pics/chat-ui2.png" alt="第二轮迭代聊天UI示意图"></p>
+<p>我们能注意到，虽然第二轮迭代在界面上有了一些改进，但仍然存在一些问题，例如消息输入框和发送按钮的交互体验还可以进一步优化。某种意义上来说，顶部的聊天抬头有些太大了，占用了过多的屏幕空间。</p>
 <h3 id="3">3. 第三轮迭代</h3>
+<p>在<a href="../rag/rag-index/">RAG项目</a>第一版本的开发完成之后，我们需要根据新功能做一些调整：</p>
+<ol>
+<li>在assistant回复的时候，同时也能附上相关文档的链接气泡。回复的<code>[**.md]</code>在渲染后能够指向对应的文章页面。</li>
+<li>根据模型API返回的内容，对其中的markdown格式文本进行渲染。</li>
+<li>优化消息输入框和发送按钮的交互体验。</li>
+</ol>
+<details>
+<summary>查看第三轮迭代的代码</summary>
+
+
+<pre><code class="language-html">&lt;div id=&quot;chat-page&quot;&gt;
+  &lt;div class=&quot;chat-header&quot;&gt;聊天页面&lt;/div&gt;
+
+  &lt;div id=&quot;chat-box&quot;&gt;&lt;/div&gt;
+
+  &lt;div class=&quot;input-wrap&quot;&gt;
+    &lt;textarea id=&quot;message&quot; placeholder=&quot;请输入消息&quot;&gt;&lt;/textarea&gt;
+    &lt;button id=&quot;send-button&quot; onclick=&quot;sendMessage()&quot;&gt;发送&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/marked/marked.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+    #chat-page {
+        max-width: 900px;
+    }
+
+    .chat-header {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        color: #444;
+    }
+
+    #chat-box {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        height: 58vh;
+        overflow-y: auto;
+        margin-bottom: 12px;
+        background: #fafafa;
+    }
+
+    .user,
+    .assistant {
+        width: fit-content;
+        max-width: 75%;
+        padding: 10px 14px;
+        margin: 10px 0;
+        border-radius: 10px;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .user {
+        margin-left: auto;
+        text-align: left;
+        color: white;
+        background: #4051b5;
+    }
+
+    .assistant {
+        margin-right: auto;
+        text-align: left;
+        color: #222;
+        background: white;
+        border: 1px solid #e5e5e5;
+    }
+
+    /*markdown paragraph*/
+    .assistant p {
+        margin: 0 0 10px 0;
+    }
+
+    .assistant p:last-child {
+        margin-bottom: 0;
+    }
+
+    /*markdown list*/
+    .assistant ul,
+    .assistant ol {
+        margin: 8px 0;
+        padding-left: 24px;
+    }
+
+    /*markdown inline code*/
+    .assistant code {
+        background: #f3f3f3;
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    /*markdown code block*/
+    .assistant pre {
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .assistant pre code{
+        background: none;
+        padding: 0;
+    }
+
+    /*source file boxes*/
+    .sources {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid #eee;
+    }
+
+    .source-chip {
+        display: inline-block;
+        padding: 4px 9px;
+        border: 1px solid #ccd3e3;
+        border-radius: 6px;
+        background: #f5f7ff;
+        color: #4051b5;
+        font-size: 0.82rem;
+        text-decoration: none;
+    }
+
+    .source-chip:hover {
+        background: #e8ecff;
+    }
+
+    /*input area*/
+    .input-wrap {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    #message {
+        flex: 1;
+        min-height: 80px;
+        padding: 10px;
+        border: 1px solid #bbb;
+        border-radius: 8px;
+        resize: vertical;
+        box-sizing: border-box;
+    }
+
+    #send-button {
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        background: #4051b5;
+        color: white;
+        cursor: pointer;
+    }
+
+    #send-button:hover {
+        opacity: 0.9;
+    }
+
+&lt;/style&gt;
+
+&lt;script&gt;
+    function sourceToUrl(source) {
+        if (source === &quot;index.md&quot;) {
+            return &quot;/wiki-docs/&quot;;
+        }
+        if (source.endsWith(&quot;.md&quot;)) {
+            return &quot;/wiki-docs/&quot; + source.replace(/\.md$/, &quot;&quot;) + &quot;/&quot;;
+        }
+        return &quot;#&quot;;
+    }
+
+    function addMessage(role, text, sources = []){
+        const chatBox = document.getElementById(&quot;chat-box&quot;);
+        const messageElement = document.createElement(&quot;div&quot;);
+
+        messageElement.className = role;
+
+        if (role === &quot;assistant&quot;){
+            messageElement.innerHTML = DOMPurify.sanitize(
+                marked.parse(text)
+            );
+
+            if(sources.length &gt; 0){
+                const sourcesElement = document.createElement(&quot;div&quot;);
+                sourcesElement.className = &quot;sources&quot;;
+
+                sources.forEach(source =&gt; {
+                    const sourceLink = document.createElement(&quot;a&quot;);
+                    sourceLink.className = &quot;source-chip&quot;;
+                    sourceLink.innerText = source;
+                    sourceLink.href = sourceToUrl(source);
+                    sourceLink.target = &quot;_blank&quot;;
+
+                    sourcesElement.appendChild(sourceLink);
+                });
+                messageElement.appendChild(sourcesElement);
+            }
+
+        }else{
+                messageElement.innerText = text;
+         }
+
+        chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // 自动滚动到底部
+    }
+
+    async function sendMessage(){
+        const input = document.getElementById(&quot;message&quot;);
+        const button = document.getElementById(&quot;send-button&quot;);
+
+        const message = input.value.trim();//空格无效
+
+        if(!message) return;
+
+        addMessage(&quot;user&quot;, message);
+        input.value = &quot;&quot;; //自动清空
+
+        button.disabled = true; // 禁用按钮，防止重复点击
+        button.innerText = &quot;发送中...&quot;; // 改变按钮文本
+
+        try{
+            const response = await fetch(&quot;https://infra01.xxxxxx.ts.net/chat&quot;, {
+                method: &quot;POST&quot;,
+                headers: {
+                    &quot;Content-Type&quot;: &quot;application/json&quot;
+                },
+                body: JSON.stringify({ message:message })
+             });
+
+            if(!response.ok){
+                throw new Error(&quot;网络请求失败, HTTP error: &quot;+response.status);
+            }
+
+            const data = await response.json();
+            addMessage(&quot;assistant&quot;, data.answer, data.sources || []);
+
+        } catch (error){
+            console.error(&quot;Error:&quot;, error);
+            addMessage(&quot;assistant&quot;, &quot;请求失败，请稍后再试。&quot;);
+        } finally {
+            button.disabled = false; // 恢复按钮
+            button.innerText = &quot;发送&quot;; // 恢复按钮文本
+            input.focus(); // 重新聚焦输入框
+        }
+    }
+
+    document.getElementById(&quot;message&quot;).addEventListener(&quot;keydown&quot;, function(event){
+        if(event.key === &quot;Enter&quot;){
+            event.preventDefault(); // 阻止默认的回车行为
+            sendMessage();
+        }
+    });
+
+&lt;/script&gt;
+</code></pre>
+
+
+</details>
+
+<p><img src="pics/chat-ui3.png" alt="第三轮迭代聊天UI示意图"></p>
+<p>到目前看来，这个聊天UI已经具备了基础的功能，在网页端看起来也相对美观。但在移动端上查看相对有些不尽人意（尤其是列表部分），我们会在下一个版本简单优化掉这个问题。</p>
 
 
 

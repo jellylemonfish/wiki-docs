@@ -257,7 +257,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        你的这些话实在是太术语了，简单翻译一下，你这些日子到底做了什么？
+        所以，这个项目到底在做什么？
       
     </span>
   </a>
@@ -279,7 +279,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        项目的构架图
+        当前系统架构
       
     </span>
   </a>
@@ -903,7 +903,7 @@
   <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        你的这些话实在是太术语了，简单翻译一下，你这些日子到底做了什么？
+        所以，这个项目到底在做什么？
       
     </span>
   </a>
@@ -925,7 +925,7 @@
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        项目的构架图
+        当前系统架构
       
     </span>
   </a>
@@ -949,66 +949,98 @@
 
 
 
-<h1 id="shiens-ai-infrastructure-wiki">Shien's AI Infrastructure wiki</h1>
-<p>这是一个记录个人从数学+统计学背景转向AI system/ AI infracstruture 的工程实践技术文档。通过搭建完整的 AI 服务运行环境，理解从计算资源、服务部署到应用接口的整条链路。</p>
+<h1 id="shiens-ai-infrastructure-wiki">Shien's AI Infrastructure Wiki</h1>
+<p>这是一个记录我从数学与统计背景转向 <strong>AI Systems / AI Infrastructure</strong> 的工程实践 Wiki。</p>
+<p>这个项目关注的并不只是“如何调用一个大模型”，而是一个更完整的问题：</p>
+<p><strong>如何把一个 AI 能力，从模型调用变成一个真正可以访问、部署、运行、维护和迭代的服务？</strong></p>
+<p>从 Linux 服务器、网络与反向代理，到 FastAPI、Docker、日志、公网访问，再到 LLM API、RAG 知识库和后续的 GPU 推理服务，本 Wiki 持续记录整个 AI 服务系统从零搭建的过程，以及其中的技术决策、故障排查和工程实践。</p>
 <ul>
-<li>github <a href="https://github.com/jellylemonfish">@jellylemonfish</a></br></li>
-<li><a href="pdf/Shien%20Zhu%20resume%20cv%E4%B8%AD%E6%96%87%202026%2008.pdf">简历/cv【2608更新】</a><!--TODO 需要搞一个文件直接下载的链接--></li>
+<li>GitHub：<a href="https://github.com/jellylemonfish">@jellylemonfish</a></li>
+<li><a href="pdf/Shien%20Zhu%20resume%20cv%E4%B8%AD%E6%96%87%202026%2008.pdf">简历 / CV【2026.08 更新】</a></li>
 </ul>
-<h3 id="_1">你的这些话实在是太术语了，简单翻译一下，你这些日子到底做了什么？</h3>
-<p>我的背景主要来自数学与统计。在学习 LLM 相关理论与应用的过程中，我逐渐关注一个问题：一个模型能力如何从实验环境进入真实服务系统？<strong>如何把一个AI能力从模型调用、变成一个可以访问、运行、维护的服务？</strong> </p>
-<p>如果只是做一个AI demo，几天时间能搞定：搞一个前端页面、然后搞到一个API key，充点钱，调模型，再写一个README…… 但从demo到稳定运行的服务，我们还要处理相当多的工程问题。</p>
-<p>故此，从一个主要使用 R 进行统计计算、具备用Python处理10GB等经验的统计背景学术研究者，在两个月内从零开始部署一个AI服务系统，并让一个LLM服务上线。跟随下面的这些文档，我保证一个什么都不懂的小白，学会如何货比三家租服务器、搞定代理，完成API服务开发并接入模型，并搞懂为什么要这么做。以及中间出现了什么样的bug和问题，又要如何去解决……因为我就是这么一步步走过来的。</p>
-<p><strong>为什么不直接调用大模型？</strong></p>
-<p>虽然目前的版本依旧使用外部的LLM API作为推理后端，但我的重点还是在搭建一个完整的AI服务架构。后续将替换成本地部署的模型，而上层应用无需改变。</p>
-<p>好，那我们就此开始我们的计算机旅程了！<strong>Just do it!</strong></p>
-<p><em>Date: 2026-08-25 21:07:59</em></p>
+<h3 id="_1">所以，这个项目到底在做什么？</h3>
+<p>我的原始背景主要来自数学与统计。在学习 LLM 相关理论与应用的过程中，我逐渐开始关注模型之外的问题：<strong>一个模型在 notebook 里能够生成回答，它能成为一个服务吗？答案是不能的。</strong>……从 Demo 到真正运行的系统，中间还存在服务器环境、网络API、进程管理等等大量工程问题。</p>
+<p>因此，我从一个主要使用 R 进行统计计算、具备 Python 数据处理经验的研究背景出发，从零开始搭建一套完整的 AI 服务环境。目前已经完成了基础 Infrastructure、LLM API 服务接入，以及第一版可运行的 RAG 工程文档问答系统。</p>
+<p>这个 Wiki 不只记录最后怎么做，也记录在开发过程中遇到的
+* 为什么选择这种方案；
+* 系统中的不同组件分别解决什么问题；
+* 实际开发过程中出现过哪些 bug；
+* 如何定位和解决这些问题；
+* 系统目前有哪些限制，以及下一步准备如何继续改进。
+* ……等等。</p>
+<p>目前系统仍然使用外部 LLM API 作为部分推理后端，但整体架构已经按照服务化方式拆分。后续将进一步进入 <strong>vLLM + GPU 本地模型部署、性能 benchmark、profiling、并发与资源管理</strong> 等阶段。</p>
+<p><strong>Just do it.</strong></p>
+<p><em>Date: 2026-09-12 14:32:30</em></p>
 <hr />
 <h3 id="_2">主要内容</h3>
-<p><strong>Foundation：</strong> （可以跳过）简单介绍一下和AI强相关的LLM的概念。十分了解的可以跳过。</p>
+<p><strong>Foundation</strong></p>
+<p>用于补充后续工程实践中涉及的基础概念。已有相关背景的读者可以直接跳过。</p>
 <ul>
-<li>LLM基础</li>
+<li>LLM 基础</li>
 </ul>
-<p><strong>Infrastructure：</strong> 在infrastructure章节中，我们将介绍并部署整个系统的底座，它们共同组成了我们服务的运行环境，并将服务跑起来。</p>
+<p><strong>Infrastructure</strong></p>
+<p>负责搭建 AI 服务运行所需要的基础环境。</p>
 <ul>
 <li><a href="linux/">Linux 系统环境与服务管理</a></li>
 <li><a href="network/">网络通信与请求链路分析</a></li>
 <li><a href="nginx/">服务入口与反向代理（Nginx）</a></li>
-<li><a href="fastapi/">API服务化（FastAPI）</a></li>
+<li><a href="fastapi/">API 服务化（FastAPI）</a></li>
 <li><a href="docker/">容器化部署（Docker）</a></li>
-<li><a href="logging/">日志监控</a></li>
+<li><a href="logging/">日志与监控</a></li>
 <li><a href="tailscale/">公网访问（Tailscale）</a></li>
 </ul>
-<p><strong>AI system：</strong> 在AI system章节中，我们将介绍如何将主流的AI模型接进我们的服务。</p>
+<p><strong>AI Systems</strong></p>
+<p>负责将模型能力真正接入服务，并逐步构建完整 AI 应用链路。</p>
 <ul>
-<li><a href="llm-api/">LLM API接入</a></li>
-<li>RAG知识库</li>
-<li>本地模型部署</li>
-<li>Agent系统设计</li>
+<li><a href="llm-api/">LLM API 接入</a></li>
+<li><strong><em>Rag 工程文档知识库</em></strong></li>
+<li><a href="rag/index.md">RAG项目总览</a></li>
+<li><a href="rag/ingestion.md">文档处理与索引</a></li>
+<li><a href="rag/retrieval.md">检索与 Prompt</a></li>
+<li><a href="rag/service.md">RAG服务与API集成</a></li>
+<li><a href="rag/evaluation.md">Evaluation与结果分析</a></li>
+<li>GPU 本地模型部署 / vLLM</li>
+<li>推理性能 Benchmark &amp; Profiling</li>
+<li>Agent 系统设计</li>
 </ul>
-<p><strong>Engineering：</strong> 在Engineering章节中，我们将介绍如何维护、迭代升级和对外展示我们的服务系统。</p>
+<p><strong>Engineering</strong></p>
+<p>负责系统的维护、迭代和对外展示。</p>
 <ul>
-<li><a href="mkdocs/">网站部署（mkdocs）</a></li>
-<li><a href="git/">git工作流</a></li>
+<li><a href="mkdocs/">工程文档网站部署（MkDocs）</a></li>
+<li><a href="git/">Git 工作流</a></li>
 <li><a href="chat-ui/">Chat UI</a></li>
 </ul>
 <hr />
-<h3 id="_3">项目的构架图</h3>
-<p>目前本项目由两个子项目组成，分别是录入了整个工程所有技术文档的Wiki project <code>wiki-docs</code>，和作为技术主体的<code>Fastapi-demo</code>。在未来，还会增加RAG知识库与Agent的部分。</p>
-<pre><code>User
- |
-Browser
- |
-Nginx
- |
- +-------------+
- |             |
-Wiki        FastAPI
+<h3 id="_3">当前系统架构</h3>
+<p>目前项目主要由三个部分组成：</p>
+<ul>
+<li><code>wiki-docs</code>：工程技术文档，同时也是 RAG 的知识库来源；</li>
+<li><code>rag</code>：负责文档处理、向量索引、检索和上下文增强；</li>
+<li><code>fastapi-demo</code>：负责对外提供 AI 服务接口。</li>
+</ul>
+<p>当前已经跑通的主要链路如下：</p>
+<pre><code class="language-text">                         GitHub Pages
+                              |
+                           Chat UI
+                              |
+                       Tailscale Funnel
+                              |
+                           FastAPI
+                              |
+                         RAG Service
+                              |
+              +---------------+---------------+
+              |                               |
+          Retriever                         LLM API
               |
-          DeepSeek API
+           Chroma
               |
-          LLM Response
+          Embeddings
+              |
+      Markdown Wiki Docs
 </code></pre>
+<p>其中，Wiki 文档首先经过切分、Embedding 和索引构建写入 Chroma；用户通过 Chat UI 提问后，FastAPI 调用 RAG 服务检索相关文档，将检索结果作为上下文交给 LLM，并最终返回基于工程文档生成的回答。</p>
+<p>当前版本仍属于系统演进的早期阶段。接下来将继续进入 GPU 推理服务和本地模型部署、性能测试与更完整的 AI Infrastructure 实践</p>
 
 
 
