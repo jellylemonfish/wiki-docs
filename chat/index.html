@@ -989,6 +989,10 @@
 
     /* 移动端适应 */
     @media (max-width: 600px) {
+        #chat-box {
+            hight: 62vh;
+            padding: 8px;
+        }
         .user {
             max-width: 85%;
         }
@@ -996,6 +1000,42 @@
             max-width: 100%;
             width: 100%;
             box-sizing: border-box;
+            padding: 10px 12px;
+        }
+
+        .assistant ol ol,
+        .assistant ul ol,
+        .assistant ol ul,
+        .assistant ul ul{
+            padding-left: 16px;
+            margin: 6px 0;
+        }
+
+        .assistant li {
+            margin: 4px 0;
+        }
+
+        .assistant li > p {
+            margin: 0;
+        }
+
+        .assistant pre {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .assistant code {
+            overflow-wrap: anywhere;
+        }
+
+        .input-wrap {
+            align-items: stretch;
+        }
+        #message {
+            min-height: 72px;
+        }
+        #send-button {
+            padding: 8px 14px;
         }
     }
 
