@@ -19,7 +19,7 @@
     
     
       
-        <title>知识库问答系统：RAG - Shien's AI Infrastructure wiki</title>
+        <title>RAG数据摄取与离线知识库的构建：Ingestion - Shien's AI Infrastructure wiki</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#rag" class="md-skip">
+        <a href="#ragingestion" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              知识库问答系统：RAG
+              RAG数据摄取与离线知识库的构建：Ingestion
             
           </span>
         </div>
@@ -818,24 +818,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-rag" class="md-nav__link">
+  <a href="#rag-rag" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. RAG项目框架
+        &gt; 开发顺序：← 上一节：RAG项目总览 ｜ 下一节：RAG数据存储检索 →
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="&gt; 开发顺序：← 上一节：RAG项目总览 ｜ 下一节：RAG数据存储检索 →">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 知识库范围和目录扫描
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 项目限制
+        2. 文档切分
       
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 向量化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 建立索引
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -856,68 +895,178 @@
 
 
 
-<h1 id="rag">知识库问答系统：RAG</h1>
-<p>在完成 FastAPI 服务接口与 Wiki 工程文档站点的基础上，本阶段进一步将两者连接起来：以 Wiki 文档作为知识库，并在原有聊天接口上加入检索增强生成能力。由此，前期完成的 Web Service、部署链路与工程文档开始组成一个完整的 AI 问答系统——一个轻量级 RAG（Retrieval-Augmented Generation）问答系统。</p>
-<p>目前的版本（v1.0）涵盖了从文档处理、索引构建到问答服务的全链路。它能：
-- 能够读取指定的wiki markdown文档，并建立持久化的向量索引。
-- 用户通过网页聊天界面提问时，系统会先retrieval，再仅基于检索到的工程文档上下文生成回答
-- 文档信息不足的时候，通过prompt约束模型明确说出无法确定
-- 能够返回文档来源并进行最基础的citation展示
-- 能够通过公网HTTPS链路，从Github pages前端访问部署在服务器上的RAG API</p>
-<p><em>Date: 2026-09-12 14:15:24</em></p>
-<blockquote>
-<p>开发顺序：← <a href="../../chat-ui/">上一节：Chat UI</a> ｜ <a href="../ingestion/">下一节：RAG离线建库</a> → </p>
-</blockquote>
-<hr />
-<h3 id="1-rag">1. RAG项目框架</h3>
-<p>RAG项目的链路分为两个阶段：
-1. 文档处理与索引构建阶段：并不需要网络的离线阶段。包括文档切分、向量化、向量存储等模块，负责将工程文档转化为可检索的Chroma向量索引。在目前的版本中，每一次更新文档都需要重新构建索引。
-2. 问答与服务阶段：依赖网络的在线阶段。包括检索、提示模板、大模型接口、服务接口等模块，负责基于用户问题进行检索、生成回答并最终通过FastAPI和前端窗口对外展示。</p>
-<p>当前第一个版本的完整链路为：</p>
-<blockquote>
-<p>Markdown → chunks → embeddings → Chroma → retrieval → context → LLM → FastAPI → Tailscale Funnel → GitHub Pages Chat UI</p>
-</blockquote>
-<p>RAG核心代码由以下模块组成：</p>
-<pre><code class="language-text">                     +----- ingest.py
-  build_index.py ----+----- splitter.py
-        |            +----- embedding.py
-        |
- vector_store.py
-        |
-   retriever.py
-        |
-    prompt.py
-        |
-     llm.py
-        |
-    service.py
-        |
- fastapi-demo/main.py
-        |
-   (Tailscale Funnel)
-        |
-wiki-docs/docs/chat.md
+<h1 id="ragingestion">RAG数据摄取与离线知识库的构建：Ingestion</h1>
+<p>在我们完成链路设计后，我们就要从知识库的搭建开始。我们在本节要完成文档切分、向量化、建立索引并对其进行存储的整个过程。</p>
+<p><em>Date: 2026-09-13 21:58:11</em></p>
+<h2 id="rag-rag">&gt; 开发顺序：← <a href="../rag-index/">上一节：RAG项目总览</a> ｜ <a href="../retrieval/">下一节：RAG数据存储检索</a> →</h2>
+<h3 id="1">1. 知识库范围和目录扫描</h3>
+<p>我们第一版 RAG 的知识库范围是，只使用我们现有 <code>wiki-docs/docs/</code> 里的 Markdown 文档，不额外找数据。这样做的目的是让助手能够基于项目本身已经沉淀的部署工程文档来回答问题。</p>
+<p>在 FastAPI 项目里新建一个专门放 RAG 代码的目录，例如 <code>rag/</code>。新建 <code>rag/ingest.py</code>，先实现“扫描并读取所有 <code>.md</code> 文件”。我们的伪代码思路如下四步：</p>
+<pre><code class="language-python">找到 docs 文件夹
+
+documents = []
+
+对于 docs 里面的每一个 md 文件:
+    读取文件
+    把 文件名 + 文件内容 放进 documents
+
+return documents
+</code></pre>
+<p>在定位知识库的时候，为了避免依赖运行命令是所在的工作目录，我们可以从当前的<code>ingest.py</code>所在的位置构造路径：</p>
+<pre><code class="language-python">from pathlib import Path 
+DOCS_DIR = Path(__file__).parent.parent.parent / &quot;wiki-docs&quot; / &quot;docs&quot;
+</code></pre>
+<p>这么做的好处是，无论我们从哪个目录运行 <code>ingest.py</code>，都能正确定位到 <code>wiki-docs/docs</code> 目录，避免“本地能运行，但换个入口就找不到文件”的问题。</p>
+<p>然后，我们将使用<code>Path.rglob("*.md")</code>来递归查找所有 Markdown 文件。例如，当目录中同时存在 <code>nginx.md</code>、<code>docker.md</code> 与 <code>rag/ingestion.md</code> 时，<code>Path.rglob("*.md")</code> 都会找到它们；而 <code>file.relative_to(DOCS_DIR)</code> 会将绝对路径转换为相对于知识库根目录的路径，例如 nginx.md 或 <code>rag/ingestion.md</code>。因此，知识库迁移到另一台服务器或另一份本地目录后，记录的数据仍然保留可读、稳定的来源信息。</p>
+<details>
+<summary>function `load_markdown_file()` </summary>
+
+
+<pre><code class="language-python">from .ingest import load_markdown_files
+from langchain_text_splitters import MarkdownTextSplitter
+
+def split_markdown_files() -&gt; list[dict]:
+    &quot;&quot;&quot;
+    Split the content of markdown files into smaller chunks.
+    &quot;&quot;&quot;
+    splitter = MarkdownTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=150,
+    )
+
+    chunks = []
+
+    for doc in load_markdown_files():
+        for chunk_id, text in enumerate(splitter.split_text(doc[&quot;content&quot;])):
+            chunks.append({
+                &quot;source&quot;: doc[&quot;source&quot;],
+                &quot;chunk_id&quot; : chunk_id,
+                &quot;content&quot;: text
+            })
+
+    return chunks
 
 </code></pre>
-<p>下面是更细致的模块说明：
-- <code>ingest.py</code>：读取 Wiki 中的 Markdown 文档，并统一整理文档来源与正文内容。
-- <code>splitter.py</code>：将完整文档切分为适合 Embedding 与 retrieval 的文本块。
-- <code>embedding.py</code>：封装 Embedding 模型调用，将文本转换为向量。
-- <code>vector_store.py</code>：管理 Chroma 向量数据库及 collection。
-- <code>build_index.py</code>：串联文档读取、切分、Embedding 和写入向量库，完成离线索引构建。
-- <code>retriever.py</code>：根据用户 query 在向量数据库中检索相关文本块。
-- <code>prompt.py</code>：将检索到的 context 与用户问题组织为最终 Prompt。
-- <code>llm.py</code>：封装 LLM API 调用。
-- <code>service.py</code>：组织完整 RAG pipeline，对上层应用暴露统一问答接口。</p>
-<p>（上面这两个是不是重复了）</p>
-<h3 id="2">2. 项目限制</h3>
-<p>经过evalution测试，当前版本的 RAG 系统存在以下限制：
-- 当前的chunk定义比较固定，主要是针对自然语言的markdown，对代码块和表格的处理不足
-- 所有query都会默认地进入retrieval，尚未加入闲聊与知识库问题的路由
-- 跨文档综合能力高度依赖top-k retrieval策略，对于有关于全局的query表现有限
-- 对于多轮对话的上下文管理尚未完善，可能导致回答不够连贯
-- citation precision仍然有进一步提升的空间，偶尔会有出现无关的引用</p>
-<p>在下一个版本会尽可能地解决这些问题。</p>
+
+</details>
+<p></br></p>
+<p>除此之外，读取阶段不应只保存文本内容，还需要同时保存其来源。<code>source</code>是后续每一个chunk都要继承的 metadata。检索到相关内容后，它可以帮助系统说明答案来自哪篇工程文档；在调试检索效果时，也能快速判断是没有召回正确文档，还是文档被切分或向量化后失去了关键上下文。方便我们定位数据。如：</p>
+<pre><code>{ &quot;source&quot;: &quot;nginx.md&quot;, &quot;content&quot;: &quot;# Nginx\n...&quot; }
+</code></pre>
+<p>至此，原本分散在各个 Markdown 文件中的内容已经被统一读取并附上来源信息，方便后续的文档切分、向量化和索引建立。</p>
+<h3 id="2">2. 文档切分</h3>
+<p>向量检索的基本单位不应该是整一篇markdown文档，而是能表达相对完整语义的较小文档块，我们通称为chunk。若直接为整篇文档生成一个向量，文档同时包含多个主题时，这个向量会混合所有内容。而且，用户询问其中一个具体问题时，检索结果也难以精确定位到真正相关的段落。</p>
+<p>所以在embedding前，我们先要把每个文档拆分成夺格chunk，并继承原文档的来源信息。我们将写<code>spliter.py</code>实现这个功能。如：</p>
+<pre><code>{ &quot;source&quot;: &quot;nginx.md&quot;, &quot;chunk_id&quot;: 3, &quot;content&quot;: &quot;...&quot; }
+</code></pre>
+<p>其中<code>source</code>表示该chunk来源的原始文档，<code>chunk_id</code>是该文档中chunk的编号，<code>content</code>是chunk的具体内容。</p>
+<p>我们第一版RAG的切分工具是使用LangChain提供的<code>MarkdownTextSplitter</code>:</p>
+<pre><code>from .ingest import load_markdown_files
+from langchain_text_splitters import MarkdownTextSplitter
+
+def split_markdown_files() -&gt; list[dict]:
+    &quot;&quot;&quot;
+    Split the content of markdown files into smaller chunks.
+    &quot;&quot;&quot;
+
+    splitter = MarkdownTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=150,
+    )    
+
+    chunks = []
+
+    for doc in load_markdown_files():
+        for chunk_id, text in enumerate(splitter.split_text(doc[&quot;content&quot;])):
+            chunks.append({
+                &quot;source&quot;: doc[&quot;source&quot;],
+                &quot;chunk_id&quot; : chunk_id,
+                &quot;content&quot;: text
+            })
+
+    return chunks
+</code></pre>
+<p><code>chunk_size=1000</code> 表示每个 chunk 的目标最大长度约为 1000 个字符；<code>chunk_overlap=150</code> 表示相邻 chunk 会保留约 150 个字符的重叠区域。重叠的作用是降低文本恰好在关键句中间被截断的风险：即使某一句话跨越切分边界，前后两个 chunk 仍会共享一部分上下文。</p>
+<p>我们最开始的参数是 <code>chunk_size=500, chunk_overlap=150</code>，这个配置让单个 chunk 较短，并通过较大的 overlap 尽量保留上下文。但在实际打印并检查切分结果后，发现项目文档并不只是纯文本 Markdown，其中还包含 HTML 页面结构、CSS 样式与 JavaScript 函数。较小的 chunk 容易将一段完整的 <code>&lt;style&gt;</code>、<code>&lt;script&gt;</code> 或函数实现从中间切开，导致检索到的文本缺少必要上下文。最终，我们适当增大了chunk的大小，并降低overlap，避免重复内容过多而产生大量近似检索结果。</p>
+<blockquote>
+<p>当然，目前的第一版依旧是存在问题的。<code>MarkdownTextSplitter</code> 能利用部分 Markdown 结构辅助切分，但不会真正理解 HTML、CSS 或 JavaScript 的语法边界。例如，它无法保证一个 <code>&lt;script&gt;</code> 标签中的 <code>sendMessage()</code> 函数一定作为完整单元保存，也无法理解 CSS 选择器和样式规则之间的关系。
+比较理想的后续方案是，针对不同的内容进行分别处理。比如按HTML标签识别组织架构、按函数和类型切分JavaScript。然而这将引入额外的解析规则设计和实现成本。
+第一版RAG的主要目标是优先跑通整个链路。所以此处选了最简单的通用切分方式，我们将强化结构感知的切分方案留到后续优化。</p>
+</blockquote>
+<p>切分完成后，每一个 chunk都具备了文本内容、来源路径和文档内的序号。下一步我们将使用embedding模型，把这些文本块转换成可计算语义相似度的向量。</p>
+<h3 id="3">3. 向量化</h3>
+<p>切分完成后，每个chunk仍然还是普通文本，向量数据库没法直接理解语义的，所以我们需要embedding模型，将文本转化为固定长度的数值向量。在查询阶段，用户问题也会经过同一个 embedding 模型转换为向量；系统再计算问题向量与各个 chunk 向量之间的相似度，从知识库中找出语义最接近的内容。换言之，embedding 模型负责“检索时如何理解文本相近”，而后续的生成式 LLM 负责“如何基于检索结果组织回答”。</p>
+<p>RAG中生成式LLM与embedding承担的是两种不同的工作，所以我们并不要求使用同一家服务商。我们第一版RAG的聊天窗口继续使用已有的Deepseek服务，但Deepseek目前没有适合本项目直接调用的 embedding API，因此我们单独选用<a href="https://docs.bigmodel.cn/cn/guide/models/embedding/embedding-3#python">智谱的embedding-3</a>完成向量化。我们需要保证在向量化阶段使用的 embedding 模型与查询阶段使用的 embedding 模型保持一致，以确保语义相似度计算的准确性。生成式LLM模型并不直接参与向量相似度的计算。我们将在<code>embedding.py</code>文件中实现这个功能。</p>
+<blockquote>
+<p>第一版RAG目的是为了尽快验证完整链路，所以先调用模型厂商的独立API。后续版本若有本地化部署或成本控制需求，只需替换 embedding 接口层，而不必重写整个 RAG 流程。</p>
+</blockquote>
+<p>智谱的embedding-3模型有一个可以自定义向量维度的优势。维度越高，通常能保留更多语义信息，但向量数据库的存储与相似度计算成本也会随之增加。对于我们目前当前规模较小、以中文工程文档为主的知识库，1024 维在语义表达能力与资源消耗之间提供了足够稳妥的第一版折衷方案。</p>
+<details>
+<summary>最终，我们调用的代码大致为</summary>
+
+
+<pre><code class="language-python">import os
+
+from dotenv import load_dotenv
+from zai import ZhipuAiClient
+
+# from rag.splitter import split_markdown_files
+
+load_dotenv()
+client = ZhipuAiClient(api_key=os.getenv(&quot;ZHIPUAI_API_KEY&quot;))
+
+def embed_text(text: str) -&gt; list:
+    &quot;&quot;&quot;
+    Convert a text string into an embedding vector.
+    &quot;&quot;&quot;
+    response = client.embeddings.create(
+        model=&quot;embedding-3&quot;,
+        input=text,
+        dimensions=1024,
+    )
+
+    return response.data[0].embedding
+</code></pre>
+
+</details>
+<p></br></p>
+<p>其中，<code>load_dotenv()</code> 用于加载环境变量文件 <code>.env</code>，确保 <code>ZHIPUAI_API_KEY</code> 能够被正确读取。<code>client = ZhipuAiClient(api_key=os.getenv("ZHIPUAI_API_KEY"))</code> 用于创建智谱AI客户端实例，后续通过该实例调用 embedding API。我们不会把密钥直接写进会放进公开仓库或者被推流到git上。</p>
+<p>在单文本测试确认接口能稳定反馈长度为1024的向量后，我们在批量处理已经切好的chunks。至此，我们每一条数据都同时包含原始文本、来源、文档内序号与对应向量。这样，这些数据就可以直接存入向量数据库，下一节我们将介绍如何基于这些向量建立索引。</p>
+<pre><code>{ &quot;source&quot;: &quot;nginx.md&quot;, &quot;chunk_id&quot;: 3, &quot;content&quot;: &quot;...&quot;, &quot;embedding&quot;: [0.012, -0.034, ...], }
+</code></pre>
+<h3 id="4">4. 建立索引</h3>
+<p>在完成 <code>ingest.py</code>, <code>spliter.py</code>， <code>embedding.py</code> 的实现后，我们需要一个离线建库的脚本<code>build_index.py</code>，将它们三个功能模块串联起来。注意：它不参与用户的实时请求，它通常只有在我们更新文档、需要重建索引的时候运行。我们在service小节提到的部署脚本<code>deploy.sh</code>中，会根据文档变更情况决定是否调用该脚本。</p>
+<details>
+<summary>对应的实现代码</summary>
+
+
+<pre><code class="language-python">from .splitter import split_markdown_files
+from .embedding import embed_chunks
+from .vector_store import save_chunks,get_collection
+
+def build_index():
+    chunks = split_markdown_files()
+    print(f&quot;Chunks: {len(chunks)}&quot;)
+
+    embedded_chunks = embed_chunks(chunks)
+    print(f&quot;Embedded chunks: {len(embedded_chunks)}&quot;)
+
+    save_chunks(embedded_chunks)
+
+    collection = get_collection()
+    print(f&quot;Collection count after save: {collection.count()}&quot;)
+
+#%%
+if __name__ == &quot;__main__&quot;:
+    build_index()
+
+
+</code></pre>
+
+</details>
+<p></br></p>
+<p>这个脚本本身不具备具体的业务逻辑，它只是作为一个编排曾，按照固定的顺序调用功能模块模块，保证每个模块的职责清晰。在<code>deploy.sh</code>脚本中，我们会通过<code>python -m rag.build_index</code> 来调用该脚本，从而可以让python将<code>rag</code>识别成项目包，从而稳定分析诸如<code>from (rag).embedding import embed_chunks</code>的绝对（或相对）的导入路径。</p>
+<p>就此，离线建库的流程就完成了。在下一小节中，我们会讨论那些需要网络的流程的其他部分。</p>
 
 
 

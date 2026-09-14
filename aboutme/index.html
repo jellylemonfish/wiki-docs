@@ -9,10 +9,6 @@
       
       
       
-        <link rel="prev" href="..">
-      
-      
-        <link rel="next" href="../linux/">
       
       
         
@@ -23,7 +19,7 @@
     
     
       
-        <title>Chat - Shien's AI Infrastructure wiki</title>
+        <title>关于我 - Shien's AI Infrastructure wiki</title>
       
     
     
@@ -63,6 +59,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -95,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Chat
+              关于我
             
           </span>
         </div>
@@ -215,17 +216,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../chat/" class="md-nav__link">
         
   
   
@@ -241,7 +235,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -815,6 +808,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -831,311 +826,20 @@
 
 
 
-  <h1>Chat</h1>
-
-<div id="chat-page">
-  <div class="chat-header">聊天页面</div>
-
-  <div id="chat-box"></div>
-
-  <div class="input-wrap">
-    <textarea id="message" placeholder="请输入消息"></textarea>
-    <button id="send-button" onclick="sendMessage()">发送</button>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-
-<style>
-    /* 网页端样式 */
-    #chat-page {
-        max-width: 900px;
-    }
-
-    .chat-header {
-        font-size: 1.4rem;
-        font-weight: 600;
-        margin: 0 0 12px 0;
-        color: #444;
-    }
-
-    #chat-box {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 16px;
-        height: 58vh;
-        overflow-y: auto;
-        margin-bottom: 12px;
-        background: #fafafa;
-    }
-
-    .user,
-    .assistant {
-        width: fit-content;
-        max-width: 75%;
-        padding: 10px 14px;
-        margin: 10px 0;
-        border-radius: 10px;
-        line-height: 1.6;
-        word-break: break-word;
-    }
-
-    .user {
-        margin-left: auto;
-        text-align: left;
-        color: white;
-        background: #4051b5;
-    }
-
-    .assistant {
-        margin-right: auto;
-        text-align: left;
-        color: #222;
-        background: white;
-        border: 1px solid #e5e5e5;
-    }
-
-    /*markdown paragraph*/
-    .assistant p {
-        margin: 0 0 10px 0;
-    }
-
-    .assistant p:last-child {
-        margin-bottom: 0;
-    }
-
-    /*markdown list*/
-    .assistant ul,
-    .assistant ol {
-        margin: 8px 0;
-        padding-left: 24px;
-    }
-
-    /*markdown inline code*/
-    .assistant code {
-        background: #f3f3f3;
-        padding: 2px 5px;
-        border-radius: 4px;
-        font-size: 0.9em;
-    }
-
-    /*markdown code block*/
-    .assistant pre {
-        background: #f5f5f5;
-        padding: 10px;
-        border-radius: 6px;
-        overflow-x: auto;
-    }
-
-    .assistant pre code{
-        background: none;
-        padding: 0;
-    }
-
-    /*source file boxes*/
-    .sources {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 10px;
-        padding-top: 8px;
-        border-top: 1px solid #eee;
-    }
-
-    .source-chip {
-        display: inline-block;
-        padding: 4px 9px;
-        border: 1px solid #ccd3e3;
-        border-radius: 6px;
-        background: #f5f7ff;
-        color: #4051b5;
-        font-size: 0.82rem;
-        text-decoration: none;
-    }
-
-    .source-chip:hover {
-        background: #e8ecff;
-    }
-
-    /*input area*/
-    .input-wrap {
-        display: flex;
-        gap: 10px;
-        align-items: flex-end;
-    }
-
-    #message {
-        flex: 1;
-        min-height: 80px;
-        padding: 10px;
-        border: 1px solid #bbb;
-        border-radius: 8px;
-        resize: vertical;
-        box-sizing: border-box;
-    }
-
-    #send-button {
-        padding: 9px 16px;
-        border: none;
-        border-radius: 8px;
-        background: #4051b5;
-        color: white;
-        cursor: pointer;
-    }
-
-    #send-button:hover {
-        opacity: 0.9;
-    }
-
-    /* 移动端适应 */
-    @media (max-width: 600px) {
-        #chat-box {
-            hight: 62vh;
-            padding: 8px;
-        }
-        .user {
-            max-width: 85%;
-        }
-        .assistant {
-            max-width: 100%;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 10px 12px;
-        }
-
-        .assistant ol ol,
-        .assistant ul ol,
-        .assistant ol ul,
-        .assistant ul ul{
-            padding-left: 16px;
-            margin: 6px 0;
-        }
-
-        .assistant li {
-            margin: 4px 0;
-        }
-
-        .assistant li > p {
-            margin: 0;
-        }
-
-        .assistant pre {
-            max-width: 100%;
-            overflow-x: auto;
-        }
-
-        .assistant code {
-            overflow-wrap: anywhere;
-        }
-
-        .input-wrap {
-            align-items: stretch;
-        }
-        #message {
-            min-height: 72px;
-        }
-        #send-button {
-            padding: 8px 14px;
-        }
-    }
-
-</style>
-
-<script>
-    function sourceToUrl(source) {
-        if (source === "index.md") {
-            return "/wiki-docs/";
-        }
-        if (source.endsWith(".md")) {
-            return "/wiki-docs/" + source.replace(/\.md$/, "") + "/";
-        }
-        return "#";
-    }
-
-    function addMessage(role, text, sources = []){
-        const chatBox = document.getElementById("chat-box");
-        const messageElement = document.createElement("div");
-
-        messageElement.className = role;
-
-        if (role === "assistant"){
-            messageElement.innerHTML = DOMPurify.sanitize(
-                marked.parse(text)
-            );
-
-            if(sources.length > 0){
-                const sourcesElement = document.createElement("div");
-                sourcesElement.className = "sources";
-
-                sources.forEach(source => {
-                    const sourceLink = document.createElement("a");
-                    sourceLink.className = "source-chip";
-                    sourceLink.innerText = source;
-                    sourceLink.href = sourceToUrl(source);
-                    sourceLink.target = "_blank";
-
-                    sourcesElement.appendChild(sourceLink);
-                });
-                messageElement.appendChild(sourcesElement);
-            }
-
-        }else{
-                messageElement.innerText = text;
-         }
-
-        chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight; // 自动滚动到底部
-    }
-
-    async function sendMessage(){
-        const input = document.getElementById("message");
-        const button = document.getElementById("send-button");
-
-        const message = input.value.trim();//空格无效
-
-        if(!message) return;
-
-        addMessage("user", message);
-        input.value = ""; //自动清空
-
-        button.disabled = true; // 禁用按钮，防止重复点击
-        button.innerText = "发送中..."; // 改变按钮文本
-
-        try{
-            const response = await fetch("https://infra01.tail85a0b8.ts.net/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ message:message })
-             });
-
-            if(!response.ok){
-                throw new Error("网络请求失败, HTTP error: "+response.status);
-            }
-
-            const data = await response.json();
-            addMessage("assistant", data.answer, data.sources || []);
-
-        } catch (error){
-            console.error("Error:", error);
-            addMessage("assistant", "请求失败，请稍后再试。");
-        } finally {
-            button.disabled = false; // 恢复按钮
-            button.innerText = "发送"; // 恢复按钮文本
-            input.focus(); // 重新聚焦输入框
-        }
-    }
-
-    document.getElementById("message").addEventListener("keydown", function(event){
-        if(event.key === "Enter"){
-            event.preventDefault(); // 阻止默认的回车行为
-            sendMessage();
-        }
-    });
-
-</script>
+<h1 id="_1">关于我</h1>
+<p><img src="pics/aboutme.png" alt="关于我"></p>
+<p>你好，我是 Shien，在 GitHub 和各类社区更常使用 jellylemonfish 这个 ID。</p>
+<p>我的经历横跨过一些不同的方向。本科期间曾和朋友一起尝试独立游戏开发，也因此积累了一些程序基础；后来在统计与数学的学习和研究中，因为拓扑、几何边界计算等问题逐渐接触到机器学习的统计原理。相比单纯使用模型，我慢慢发现自己更感兴趣的是模型背后的工程系统。让想法变成一个真正可以用、且好用的系统是一件很有意思的事情。</p>
+<p>这个wiki主要记录我逐渐搭建工程系统的过程、心得以及遇到的问题和解决方案。</p>
+<p>目前我的求职方向是：AI systems / AI Infrastructure / AI 后端工程相关岗位。</p>
+<ul>
+<li>GitHub：<a href="https://github.com/jellylemonfish">@jellylemonfish</a></li>
+<li><a href="../pdf/Shien%20Zhu%20resume%20cv%E4%B8%AD%E6%96%87%202026%2008.pdf">简历 / CV【2026.08 更新】</a></li>
+</ul>
+<p>如果您对我的经历、项目或工作合作感兴趣，欢迎通过 GitHub 或邮件与我联系。</p>
+<ul>
+<li>邮箱：shien2019@outlook.com</li>
+</ul>
 
 
 

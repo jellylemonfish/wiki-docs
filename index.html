@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#shiens-ai-infrastructure-wiki" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -254,7 +254,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         所以，这个项目到底在做什么？
@@ -265,7 +265,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         主要内容
@@ -276,7 +276,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         当前系统架构
@@ -900,7 +900,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         所以，这个项目到底在做什么？
@@ -911,7 +911,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         主要内容
@@ -922,7 +922,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         当前系统架构
@@ -949,7 +949,7 @@
 
 
 
-<h1 id="shiens-ai-infrastructure-wiki">Shien's AI Infrastructure Wiki</h1>
+<h1 id="_1">首页</h1>
 <p>这是一个记录我从数学与统计背景转向 <strong>AI Systems / AI Infrastructure</strong> 的工程实践 Wiki。</p>
 <p>这个项目关注的并不只是“如何调用一个大模型”，而是一个更完整的问题：</p>
 <p><strong>如何把一个 AI 能力，从模型调用变成一个真正可以访问、部署、运行、维护和迭代的服务？</strong></p>
@@ -958,7 +958,7 @@
 <li>GitHub：<a href="https://github.com/jellylemonfish">@jellylemonfish</a></li>
 <li><a href="pdf/Shien%20Zhu%20resume%20cv%E4%B8%AD%E6%96%87%202026%2008.pdf">简历 / CV【2026.08 更新】</a></li>
 </ul>
-<h3 id="_1">所以，这个项目到底在做什么？</h3>
+<h3 id="_2">所以，这个项目到底在做什么？</h3>
 <p>我的原始背景主要来自数学与统计。在学习 LLM 相关理论与应用的过程中，我逐渐开始关注模型之外的问题：<strong>一个模型在 notebook 里能够生成回答，它能成为一个服务吗？答案是不能的。</strong>……从 Demo 到真正运行的系统，中间还存在服务器环境、网络API、进程管理等等大量工程问题。</p>
 <p>因此，我从一个主要使用 R 进行统计计算、具备 Python 数据处理经验的研究背景出发，从零开始搭建一套完整的 AI 服务环境。目前已经完成了基础 Infrastructure、LLM API 服务接入，以及第一版可运行的 RAG 工程文档问答系统。</p>
 <p>这个 Wiki 不只记录最后怎么做，也记录在开发过程中遇到的
@@ -972,7 +972,7 @@
 <p><strong>Just do it.</strong></p>
 <p><em>Date: 2026-09-12 14:32:30</em></p>
 <hr />
-<h3 id="_2">主要内容</h3>
+<h3 id="_3">主要内容</h3>
 <p><strong>Foundation</strong></p>
 <p>用于补充后续工程实践中涉及的基础概念。已有相关背景的读者可以直接跳过。</p>
 <ul>
@@ -995,8 +995,8 @@
 <li><a href="llm-api/">LLM API 接入</a></li>
 <li><strong><em>Rag 工程文档知识库</em></strong></li>
 <li><a href="rag/index.md">RAG项目总览</a></li>
-<li><a href="rag/ingestion.md">文档处理与索引</a></li>
-<li><a href="rag/retrieval.md">检索与 Prompt</a></li>
+<li><a href="rag/ingestion/">文档处理与索引</a></li>
+<li><a href="rag/retrieval/">检索与 Prompt</a></li>
 <li><a href="rag/service.md">RAG服务与API集成</a></li>
 <li><a href="rag/evaluation.md">Evaluation与结果分析</a></li>
 <li>GPU 本地模型部署 / vLLM</li>
@@ -1011,7 +1011,7 @@
 <li><a href="chat-ui/">Chat UI</a></li>
 </ul>
 <hr />
-<h3 id="_3">当前系统架构</h3>
+<h3 id="_4">当前系统架构</h3>
 <p>目前项目主要由三个部分组成：</p>
 <ul>
 <li><code>wiki-docs</code>：工程技术文档，同时也是 RAG 的知识库来源；</li>

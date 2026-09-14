@@ -850,6 +850,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 第四轮迭代
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -868,13 +879,14 @@
 
 
 <h1 id="chat-ui">聊天页面的端口：chat UI 设计</h1>
-<p>在本小节中，我们将介绍聊天页面的UI设计过程，通过多轮迭代逐步完善用户体验。至目前为止，我们一共有三轮认证：
+<p>在本小节中，我们将介绍聊天页面的UI设计过程，通过多轮迭代逐步完善用户体验。至目前为止，我们一共有四轮认证：
 - 第一轮验证了浏览器能否成功向 FastAPI /chat 发送 JSON 请求，并把返回结果显示出来。
 - 第二轮则围绕连续对话、请求状态和异常处理做一些基础的反馈，把单次的API调用做到更完善的、最轻量的聊天引用。
-- 第三轮在RAG第一版本的开发完成之后，根据新增的功能增加了更多的视觉效果和互动优化。</p>
-<p><em>Date: 2026-09-12 15:59:31</em></p>
+- 第三轮在RAG第一版本的开发完成之后，根据新增的功能增加了更多的视觉效果和互动优化。
+- 第四轮在第三轮的基础上增强了移动端的适应效果</p>
+<p><em>Date: 2026-09-13 13:04:19</em></p>
 <blockquote>
-<p>开发顺序：← <a href="../tailscale/">上一节：公网访问</a> ｜ <a href="rag/index.md">下一节：RAG项目总览</a> → </p>
+<p>开发顺序：← <a href="../tailscale/">上一节：公网访问</a> ｜ <a href="../rag/rag-index/">下一节：RAG项目总览</a> → </p>
 </blockquote>
 <hr />
 <h3 id="1">1. 第一轮迭代</h3>
@@ -1309,6 +1321,90 @@
 
 <p><img src="pics/chat-ui3.png" alt="第三轮迭代聊天UI示意图"></p>
 <p>到目前看来，这个聊天UI已经具备了基础的功能，在网页端看起来也相对美观。但在移动端上查看相对有些不尽人意（尤其是列表部分），我们会在下一个版本简单优化掉这个问题。</p>
+<h3 id="4">4. 第四轮迭代</h3>
+<p>如在第三轮迭代末尾所说，重新去检查了一下markdown内容输出的机制。然后就能意识到，之所以效果不太美观，因为其“有序列表里面再套无序列表”的情况不少，浏览器会天然缩进，移动端最终呈现的区域过窄。</p>
+<p><img src="pics/chat-ui4.png" alt="第四轮迭代聊天UI前后示意图。左图为迭代前，右图是我们想要的迭代效果"></p>
+<p>所以，我们要根据这个压一层级。如下：</p>
+<pre><code>@media (max-width: 600px) {
+    .assistant ul ul,
+    .assistant ol ul,
+    .assistant ul ol,
+    .assistant ol ol {
+        padding-left: 14px;
+    }
+}
+</code></pre>
+<p>需要值得一提的是，我们在移动端不再维持“assistant是一个窄聊天气泡”的思路（虽然在网页端没问题），我们希望它在移动端直接当成一整块全宽的正文卡片。所以最终，我们在<code>&lt;style&gt;</code>中新增的<code>@media</code>部分如下：</p>
+<details>
+<summary>第四轮迭代新增代码</summary>
+
+
+<pre><code class="language-html">&lt;style&gt;
+/* 网页端样式 */
+    #chat-page {
+        max-width: 900px;
+    }
+
+/* ...其他样式...*/
+
+/* 移动端适应 */
+    @media (max-width: 600px) {
+        #chat-box {
+            hight: 62vh;
+            padding: 8px;
+        }
+        .user {
+            max-width: 85%;
+        }
+        .assistant {
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+        }
+
+        .assistant ol ol,
+        .assistant ul ol,
+        .assistant ol ul,
+        .assistant ul ul{
+            padding-left: 16px;
+            margin: 6px 0;
+        }
+
+        .assistant li {
+            margin: 4px 0;
+        }
+
+        .assistant li &gt; p {
+            margin: 0;
+        }
+
+        .assistant pre {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .assistant code {
+            overflow-wrap: anywhere;
+        }
+
+        .input-wrap {
+            align-items: stretch;
+        }
+        #message {
+            min-height: 72px;
+        }
+        #send-button {
+            padding: 8px 14px;
+        }
+
+&lt;/style&gt;
+</code></pre>
+
+
+</details>
+
+<p>我们还要再未来进一步调整，做更好的交互设计。</p>
 
 
 
