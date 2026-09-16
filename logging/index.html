@@ -750,7 +750,35 @@
   <span class="md-ellipsis">
     
   
-    RAG离线知识库构建
+    RAG离线建库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag/retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG数据存储检索
   
 
     
@@ -1117,7 +1145,7 @@
 <h1 id="_1">服务维护的关键：日志与请求链路</h1>
 <p>我们在之前的docker和nginx章节都有简单提到如何调取log（日志），现在讲讲为什么需要它。服务程序跑起来了，并不意味着服务可维护。</p>
 <p>当<code>curl</code>返回了错误代码，只知道失败是没有意义的，我们接下来就要排查请求到底到达了服务链条的哪一层级——就像是高中生学理科的那样，真正有用的学习不是一直刷题犯错误，而是整理错题本，明晰到底是哪里出现了问题。日志便是我们确认错误犯在哪里的好工具。</p>
-<p><em>Date: 2026-08-26 12:02:44</em></p>
+<p><em>Date: 2026-09-16 22:45:41</em></p>
 <blockquote>
 <p>开发顺序：← <a href="../docker/">上一节：容器化部署</a> ｜ <a href="../llm-api/">下一节：LLM接入</a> →</p>
 </blockquote>
@@ -1191,6 +1219,7 @@ def chat(request: ChatRequest):
 <li>token数量对应成本和上下文规模。<code>logger.exception()</code> 会在 ERROR 信息之外留下 traceback。</li>
 <li><code>total_duration</code> 代表了整个<code>/chat</code>请求从进入应用到返回结果的总耗时，可以和 api_duration 对比，判断耗时主要来自外部模型还是本地处理。</li>
 </ul>
+<p>我们会在后续的RAG知识库接入中改装该<code>/chat</code>接口的设计。具体请看<a href="rag/rag-service.md">RAG service</a>一节。</p>
 <hr />
 <h3 id="3">3. 常用命令与排查实践</h3>
 <p>我们一般在我们的云端服务器才会用到下面的指令，因为在本地开发的时候，log会输出在terminal上。</p>
