@@ -792,6 +792,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag/rag-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG服务接入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1179,7 +1235,7 @@
 <p>而关于LLM模型的其他内容，都分布到了其他章节中去。模型的API key的管理请见<a href="../git/">git小节</a>，相应的日志设计请见<a href="../logging/">logging小节</a>，链路管理与反向代理请见<a href="../nginx/">nginx小节</a>。</p>
 <h3 id="4-llm">4. LLM 的复用</h3>
 <p>随着项目的复杂化，我们可能会在多个地方调用LLM服务。为了避免重复代码和降低维护成本，我们通常会将LLM的调用逻辑封装成一个独立的模块或服务层。这样，无论是在RAG流程中，还是在其他AI功能中，都可以复用同一套调用逻辑，保证一致性和可维护性。</p>
-<p>之前为了方便测试fastapi-demo 服务是否能顺利运行，LLM的调用是直接写在 fastapi-demo 的 <code>main.py</code> 上的（就如上面的小节所说，仅作为其他功能的附属左写一点右写一点）。在接下来的 rag 项目中的把<a href="rag/rag-service.md">rag服务连入fastapi-demo的部分</a>，我们终于有了把 LLM 调用独立成模块的机会了，它被写入了 <code>rag/llm.py</code> 模块。在该部分中，我们同时也对<code>main.py</code> 中的 <code>/chat</code>接口进行了重写。</p>
+<p>之前为了方便测试fastapi-demo 服务是否能顺利运行，LLM的调用是直接写在 fastapi-demo 的 <code>main.py</code> 上的（就如上面的小节所说，仅作为其他功能的附属左写一点右写一点）。在接下来的 rag 项目中的把<a href="../rag/rag-service/">rag服务连入fastapi-demo的部分</a>，我们终于有了把 LLM 调用独立成模块的机会了，它被写入了 <code>rag/llm.py</code> 模块。在该部分中，我们同时也对<code>main.py</code> 中的 <code>/chat</code>接口进行了重写。</p>
 <details>
 <summary> 目前服务于 rag v1 版本的 LLM 调用模块代码</summary>
 

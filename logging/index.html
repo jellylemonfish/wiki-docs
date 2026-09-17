@@ -792,6 +792,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag/rag-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG服务接入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag/evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1219,7 +1275,7 @@ def chat(request: ChatRequest):
 <li>token数量对应成本和上下文规模。<code>logger.exception()</code> 会在 ERROR 信息之外留下 traceback。</li>
 <li><code>total_duration</code> 代表了整个<code>/chat</code>请求从进入应用到返回结果的总耗时，可以和 api_duration 对比，判断耗时主要来自外部模型还是本地处理。</li>
 </ul>
-<p>我们会在后续的RAG知识库接入中改装该<code>/chat</code>接口的设计。具体请看<a href="rag/rag-service.md">RAG service</a>一节。</p>
+<p>我们会在后续的RAG知识库接入中改装该<code>/chat</code>接口的设计。具体请看<a href="../rag/rag-service/">RAG service</a>一节。</p>
 <hr />
 <h3 id="3">3. 常用命令与排查实践</h3>
 <p>我们一般在我们的云端服务器才会用到下面的指令，因为在本地开发的时候，log会输出在terminal上。</p>

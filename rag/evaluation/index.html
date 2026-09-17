@@ -1,0 +1,1581 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../rag-service/">
+      
+      
+        <link rel="next" href="../../mkdocs/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>RAG性能评估 - Shien's AI Infrastructure wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ragevaluation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Shien&#39;s AI Infrastructure wiki" class="md-header__button md-logo" aria-label="Shien's AI Infrastructure wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Shien's AI Infrastructure wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RAG性能评估
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Shien&#39;s AI Infrastructure wiki" class="md-nav__button md-logo" aria-label="Shien's AI Infrastructure wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Shien's AI Infrastructure wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Infrastructure
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../network/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网络基础
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nginx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    反向代理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    容器化部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fastapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API服务化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    日志监控
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tailscale/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    公网访问
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Systems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI Systems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../llm-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM API接入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG知识库
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RAG知识库
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG项目总览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingestion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG离线建库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG数据存储检索
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-service/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG服务接入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG性能评估
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RAG性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 设计要求
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rag-v1-benchmark-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. RAG v1 Benchmark cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-rag-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. RAG v1 总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Engineering
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mkdocs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    网站部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../git/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    git工作流
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chat-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    chat UI开发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    更新日志
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../aboutme/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于我
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 设计要求
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rag-v1-benchmark-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. RAG v1 Benchmark cases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-rag-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. RAG v1 总结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ragevaluation">RAG服务性能评估：evaluation</h1>
+<p>在前面的几节中，我们完成了RAG服务从无到有的搭建、并连接至FastAPI，实现了用户通过HTTP接口与RAG系统进行交互的能力。接下来，我们需要对该服务的性能进行评估，以确保其在实际使用中的响应速度和检索准确性。</p>
+<p><em>Date: 2026-09-17 16:29:06</em></p>
+<blockquote>
+<p>开发顺序：← <a href="../rag-service/">上一节：RAG服务接入</a> </p>
+</blockquote>
+<hr />
+<h3 id="1">1. 设计要求</h3>
+<p>本节对系统进行第一轮人工 evaluation. RAG虽然能够跑起来，但这不代表这个服务就值得用户的信任。接口能返回一段通顺的话，只能证明我们的这条技术链通畅，但它没有证明系统找到了正确文档、没有遗漏关键上下文，也没有证明它在不知道时会停止猜测。Evaluation 就是把这些问题从主观印象变成可复现的证据。在针对我们RAG v1 版本的评估中，我们的本次目标是要验证下面这些问题：</p>
+<ol>
+<li>检索是否召回正确来源</li>
+<li>回答是否真正依据这些来源</li>
+<li>知识库没有信息或问题前提错误时，它是否能做到明确拒绝回答</li>
+<li>跨文档和全局性的问题的边界在哪里</li>
+</ol>
+<p>本轮测试在已部署的 <code>/chat</code> 接口上执行。每一次请求都会经过同一条链路，从用户问题到检索，再到生成回答，整个过程都在评估范围内。评估中，我们会将retrieval 和 answer 分开记录。（因为一个回答可能在事实层面正确，但没有检索到最直接的证据；也可能检索到局部正确的资料，却无法完成跨文档综合）。</p>
+<h3 id="2-rag-v1-benchmark-cases">2. RAG v1 Benchmark cases</h3>
+<p>根据要求，我们设计了10个问题。以下为测试结果。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Question</th>
+<th>Type</th>
+<th>Expected source</th>
+<th>Actual source</th>
+<th>Retrieval</th>
+<th>Answer</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>您好。</td>
+<td>闲聊</td>
+<td>None</td>
+<td><code>docker.md</code>, <code>logging.md</code>, <code>nginx.md</code></td>
+<td>Fail</td>
+<td>Pass</td>
+<td>回复礼貌且符合助手角色，但闲聊仍触发了无意义 retrieval。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Nginx 是什么？</td>
+<td>基础知识 / 单文档检索</td>
+<td><code>nginx.md</code></td>
+<td><code>nginx.md</code>, <code>index.md</code></td>
+<td>Pass</td>
+<td>Pass</td>
+<td>正确说明 Nginx 的 Web Server 与反向代理职责。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>FastAPI 服务监听在哪个地址和端口？</td>
+<td>精准事实查询</td>
+<td><code>fastapi.md</code>，或明确包含反向代理配置的文档</td>
+<td><code>git.md</code>, <code>fastapi.md</code></td>
+<td>Partial</td>
+<td>Pass</td>
+<td>正确回答 <code>127.0.0.1:8000</code>，并区分了文档直接陈述与从 Nginx 转发配置得出的推断；但来源不够直观，source attribution 仍需检查。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>为什么项目中使用 Tailscale Funnel，而不是 Cloudflare Tunnel？</td>
+<td>项目选型 / 原因解释</td>
+<td><code>tailscale.md</code>，可能包括相关部署文档</td>
+<td><code>tailscale.md</code></td>
+<td>Pass</td>
+<td>Pass</td>
+<td>正确识别当前限制是 ICP 备案和域名条件，而非泛化比较两种 Tunnel 的优劣；回答明确区分了文档事实与未记录的细节。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>这个项目从本地 FastAPI 到公网网页，完整请求链路是什么？</td>
+<td>跨文档综合</td>
+<td><code>chat-ui.md</code>, <code>tailscale.md</code>, <code>nginx.md</code>, <code>fastapi.md</code> 等</td>
+<td><code>git.md</code>, <code>fastapi.md</code></td>
+<td>Fail</td>
+<td>Partial</td>
+<td>回答正确描述了传统的 Nginx → Uvicorn → FastAPI 链路，但遗漏 GitHub Pages、Tailscale Funnel 等当前项目的关键公网访问层。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>如果 FastAPI 服务显示 active，但网页请求失败，应该按什么顺序排查？</td>
+<td>故障排查 / 多步骤推理</td>
+<td><code>linux.md</code>, <code>logging.md</code>, <code>nginx.md</code>, <code>network.md</code></td>
+<td><code>linux.md</code>, <code>network.md</code>, <code>logging.md</code></td>
+<td>Partial</td>
+<td>Pass</td>
+<td>排查顺序合理：服务状态与日志 → 本机 <code>curl</code> → Nginx 日志 → 应用 traceback。可进一步验证是否应召回 Nginx 与 Tailscale 文档。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>项目有没有使用 Kubernetes 部署？</td>
+<td>错误前提 / 反事实测试</td>
+<td>与部署现状相关的文档</td>
+<td><code>docker.md</code>, <code>tailscale.md</code>, <code>linux.md</code></td>
+<td>Partial</td>
+<td>Pass</td>
+<td>没有将未来规划误答为已实现功能，能够基于现有证据拒绝确认 Kubernetes 部署。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>请介绍一下 agent-demo 项目的细节。</td>
+<td>知识库缺失测试</td>
+<td>None；或仅项目规划信息</td>
+<td><code>index.md</code>, <code>llm-api.md</code>, <code>changelog.md</code></td>
+<td>Pass</td>
+<td>Pass</td>
+<td>正确说明知识库不存在该项目的架构或实现资料，并拒绝编造细节。</td>
+</tr>
+<tr>
+<td>9</td>
+<td>作者是谁？</td>
+<td>知识库覆盖范围测试</td>
+<td>含作者署名的页面；当前 corpus 中不存在</td>
+<td><code>docker.md</code>, <code>index.md</code></td>
+<td>Fail</td>
+<td>Pass</td>
+<td>正确拒答，但说明当前 corpus 缺少作者署名信息；无关来源不应作为有效证据。</td>
+</tr>
+<tr>
+<td>10</td>
+<td>请评价整个文档站的质量。</td>
+<td>全局评价 / 高难度综合</td>
+<td><code>index.md</code>、多个代表性章节、更新日志，以及站点级摘要</td>
+<td><code>changelog.md</code>, <code>mkdocs.md</code></td>
+<td>Fail</td>
+<td>Partial</td>
+<td>能诚实说明证据不足，但只召回两个局部文档，无法代表整个文档站。</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary> 完整的对话测试记录 </summary>
+
+
+<pre><code class="language-python">您好。
+您好，我是工程文档助手。请告诉我您想了解的具体问题，我会仅根据现有文档内容为您解答；如果文档中没有足够信息，我会明确说明“根据现有文档，暂时无法确定”。
+
+docker.md
+logging.md
+nginx.md
+Nginx 是什么？
+根据文档，Nginx 是一个高性能 Web Server 和反向代理服务器。它的主要职责包括：
+
+直接响应 HTTP 请求，例如返回静态网页；
+将用户请求转发给后端服务，作为反向代理使用。
+在生产环境中，Nginx 通常作为应用前的统一入口，负责接收公网请求，再转发给内部应用，从而避免直接暴露内部服务端口，提升安全性与管理能力。
+
+nginx.md
+index.md
+
+为什么项目中使用 Tailscale Funnel，而不是 Cloudflare Tunnel？
+根据现有文档，项目改用 Tailscale Funnel 而不是 Cloudflare Tunnel 的原因是：
+
+通常可以用 Cloudflare Tunnel 来把服务暴露到公网，但 Cloudflare Tunnel 要把稳定的 hostname 建立在“用户能够控制一个 Cloudflare zone”的前提上。
+当前项目的 ICP 备案还没有下来，因此不方便正式启用自己的域名，也就无法通过 Cloudflare Tunnel 做一个长期稳定的公网暴露服务。
+所以文档中明确写道：“现在我只能更换方案：我们采取 tailscale funnel。”
+也就是说，选择 Tailscale Funnel 主要是受当前 ICP 备案和域名条件的限制，作为 Cloudflare Tunnel 的替代方案。文档没有提到其他更详细的对比原因。
+
+tailscale.md
+
+FastAPI 服务监听在哪个地址和端口？
+根据文档中的 Nginx 转发说明，FastAPI 服务对应的是：
+
+127.0.0.1:8000
+
+即监听在服务器本机回环地址的 8000 端口。文档中提到，使用 8000/ 时，Nginx 会把请求转发为 http://127.0.0.1:8000/chat，说明后端 FastAPI/Uvicorn 服务监听在 127.0.0.1:8000。
+
+不过，文档中的 systemd ExecStart 片段没有完整写明 --host 和 --port 参数，因此如果问的是该服务文件中明确写出的启动参数，文档未完整展示；但从转发逻辑看，目标是 127.0.0.1:8000。
+
+git.md
+fastapi.md
+
+这个项目从本地 FastAPI 到公网网页，完整请求链路是什么？
+根据现有文档，这个项目的请求链路可以概括为“浏览器 → 公网 IP → Nginx → Uvicorn → FastAPI → 原路返回”。具体分两种场景：
+
+1. 生产环境完整链路
+用户在浏览器访问公网地址，例如 http://公网IP/docs 或通过 HTTP/HTTPS 访问服务器。
+请求中包含三个定位信息：
+IP：找到哪台服务器，即云服务器公网 IP；
+端口：找到服务器上的哪个程序；
+路径：找到程序提供哪个功能，例如 /docs。
+请求经互联网到达云服务器的公网 IP。
+生产环境中，所有通过 HTTP/HTTPS 访问该服务器的请求，会首先到达 Nginx 监听的 80/443 端口。
+Nginx 读取请求里的 Host，匹配对应的 server block，再执行对应的 proxy_pass，把请求转发到内部运行的 FastAPI 服务。
+内部 FastAPI 服务由 Uvicorn 监听网络端口。Uvicorn 接收 Nginx 转发的请求，并交给 FastAPI 处理。
+FastAPI 根据请求路由执行对应业务逻辑，生成响应。
+响应再经 Uvicorn 返回给 Nginx，Nginx 最终返回给公网浏览器，用户看到网页或接口结果。
+可以表示为：
+
+浏览器 → 互联网 → 云服务器公网 IP:80/443 → Nginx → proxy_pass → Uvicorn → FastAPI → 响应返回 Nginx → 浏览器
+
+2. 开发/直连方式
+文档也提到，部署过程中可以通过公网 IP 8000 或 VS Code Remote SSH 访问服务。若直接访问，链路类似：
+
+浏览器 → 公网 IP:8000 → Uvicorn → FastAPI → 响应返回浏览器
+
+但需要注意：
+
+若 Uvicorn 使用 --host 127.0.0.1 --port 8000，服务只绑定服务器自身回环接口，只能服务器内部访问，公网请求无法直接访问。
+若 Uvicorn 使用 --host 0.0.0.0 --port 8000，表示监听服务器所有网络接口；如果安全组和防火墙允许，则内网或公网均可能访问。
+3. 关键分工
+FastAPI 本身不会监听网络端口，它负责定义接口路由、解析请求数据、执行对应业务逻辑并生成响应。
+Uvicorn 是 ASGI 服务器，负责接收网络请求，并把请求交给 FastAPI 处理。
+生产环境中，FastAPI 不会直接暴露在公网，而是由 Nginx 作为接收请求的入口代理。
+具体域名解析、HTTPS 证书、Nginx 的 server_name/proxy_pass 目标端口、安全组和防火墙规则等细节，根据现有文档，暂时无法确定。文档也没有说明“开发者本机运行的 FastAPI 直接暴露到公网”的过程。
+
+network.md
+fastapi.md
+如果 FastAPI 服务显示 active，但网页请求失败，应该按什么顺序排查？
+FastAPI 显示 Active: active (running) 只说明 systemd 认为服务进程在运行，不代表网页请求链路一定正常。根据文档，可按下面顺序排查：
+
+先看服务状态和日志
+
+systemctl status fastapi-demo：确认状态。
+journalctl -u fastapi-demo 查看日志；可用：
+journalctl -u fastapi-demo -f 实时查看
+journalctl -u fastapi-demo -n 50 看最近 50 条
+在服务器本机验证 FastAPI 本身是否正常
+执行：curl http://127.0.0.1:8000/docs。
+文档说明：如果成功，说明本机路由正常、Uvicorn 正在运行、服务加载成功；但 curl 是模拟本机访问，不代表公网访问一定成功。
+
+如果本机 curl 成功，但网页请求失败，检查请求链路
+网址访问包含三层定位：
+
+公网 IP：是否找对服务器
+端口：是否是 8000
+路径：如 /docs 是否正确
+文档提到，外部访问通常通过公网 IP 或 VS Code Remote SSH；而 127.0.0.1 只是设备自己访问自己。
+如果涉及 Nginx / 反向代理，并且拿到 500 等错误码，按文档顺序查
+
+Nginx access.log：请求是否到达服务器
+Nginx error.log：反向代理是否存在问题
+journalctl -u fastapi-demo：是否 FastAPI 本身异常
+应用日志：请求是否进入、API 调用耗时等
+traceback / 外部 API 错误：如 402、timeout、SDK 参数错误等
+修改配置后
+按文档要求：先 systemctl daemon-reload，再重启服务。
+
+如果出现错误服务自动重启导致内存溢满等连带问题
+登录云服务商对实例进行重启，再通过 VNC 远程登录修改配置，避免 SSH 多次触碰重启机制。
+
+总结：先确认服务状态和 journalctl 日志，再用本机 curl 127.0.0.1:8000/docs 区分是 FastAPI 本身问题还是外部访问链路问题；若涉及 Nginx，再按 access.log → error.log → journalctl → 应用日志 → traceback/外部 API 错误 排查。
+具体失败原因仅凭 active 无法确定，文档也未涉及安全组、防火墙等设置，需要结合实际日志进一步判断。
+
+linux.md
+network.md
+logging.md
+项目有没有使用 Kubernetes 部署？
+根据现有文档，暂时无法确定项目是否使用 Kubernetes 部署。
+
+文档中只提到了 Docker 容器化部署、Tailscale 公网暴露，以及 Linux 中的进程与服务管理等内容，但没有出现 Kubernetes 或 K8s 的相关信息。
+
+docker.md
+tailscale.md
+linux.md
+请介绍一下 agent-demo 项目的细节。
+根据现有文档，暂时无法确定 agent-demo 项目 的具体细节。
+
+文档中没有出现 “agent-demo” 这一项目名称，也没有对它的架构、功能、部署方式或实现细节进行说明。现有资料仅提到：
+
+AI system 章节中计划包含 Agent 系统设计。
+项目构架目前由两个子项目组成：wiki-docs 和 Fastapi-demo。
+未来还会增加 RAG 知识库与 Agent 的部分。
+因此，关于 agent-demo 项目的细节，根据现有文档无法确定。
+
+index.md
+llm-api.md
+changelog.md
+作者是谁？
+根据现有文档，暂时无法确定作者是谁。文档中没有提供作者姓名或相关署名信息。
+
+docker.md
+index.md
+请评价整个文档站的质量。
+根据现有文档，暂时无法确定整个文档站的质量。现有资料只包含更新日志（changelog）和 mkdocs 相关片段，缺少完整站点内容、页面覆盖范围、导航结构、搜索功能、部署效果、链接有效性、用户反馈等信息，因此无法对“整个文档站”的质量做全面、可靠评价。
+
+仅从现有片段可以做非常有限的初步观察：
+
+有版本记录：更新日志按版本记录了功能新增和章节更新，如聊天功能、chat UI、tailscale、nginx/git、linux 等，说明文档站有持续维护迹象。
+有基本工程化思路：mkdocs 章节介绍了从 Markdown 到静态网站、安装 mkdocs、使用 material 主题、生成站点结构等内容，体现了将工程文档站点化的实践。
+结构示例较清晰：文档中给出了 wiki-docs/ 的目录结构，区分 docs/、index.md、mkdocs.yml，便于理解文档组织方式。
+但这些只能说明文档站具备一定的组织与维护基础，不能据此判断其整体内容质量、准确性、完整性、可读性和用户体验。若要评价整个文档站质量，还需要查看完整目录、各章节正文、实际部署站点、导航与搜索体验、链接有效性以及用户反馈等信息。
+
+changelog.md
+mkdocs.md
+</code></pre>
+
+
+</details>
+
+<p>基于上面的benchmark cases表和完整的对话测试，我们可以得到以下结论：</p>
+<ol>
+<li><strong>单文档事实型 query 基本可靠</strong></li>
+</ol>
+<p>第 2 题和第 3 题表明，针对定义明确、信息集中在单一文档中的问题，v1 可以稳定检索到相关内容并生成准确回答。例如，系统能够正确说明 Nginx 的职责，也能够根据现有部署资料回答 FastAPI 监听地址与端口。第 3 题中，模型还主动区分了“文档明确写出”与“通过 Nginx 转发配置推断”的信息。这说明 prompt 中关于证据边界的约束已经发挥作用。</p>
+<ol>
+<li><strong>缺失知识与错误前提的拒答表现良好</strong></li>
+</ol>
+<p>第 7、8、9 题验证了 v1 的 grounded answer 行为。对于 Kubernetes、agent-demo 和作者信息，系统没有将通用知识或未来规划伪装成项目事实，而是明确说明当前文档不足以确认答案。尤其是第 8 题目，说明 RAG prompt拒答策略有效的。哪怕召回了包含 “Agent” 规划的文档，系统仍能够区分“未来计划”与“已有 agent-demo 项目实现”，不编造不存在的项目细节。</p>
+<p>但第 9 题暴露了知识库覆盖范围不足，而不是模型行为错误。现有 corpus 没有包含作者署名，因此“暂时无法确定”是当前最可靠的回答。</p>
+<ol>
+<li><strong>闲聊会产生无意义 retrieval</strong></li>
+</ol>
+<p>第 1 题的回答本身正常，但系统仍为“您好”检索了 docker.md、logging.md 和 nginx.md。这些结果与用户意图无关，也没有必要展示为 sources。这说明 v1 将所有请求视为知识库问题处理，尚未区分闲聊、知识查询与复杂任务。当前语料规模较小，这不会造成严重成本问题，但会降低 source attribution 的可信度。我会在下个版本改善这个问题。</p>
+<ol>
+<li><strong>跨文档综合不足</strong></li>
+</ol>
+<p>第 5 题是本轮最重要的 regression case。问题要求描述“当前项目从本地 FastAPI 到公网网页”的完整请求链路，正确回答应综合 GitHub Pages Chat UI、Tailscale Funnel、FastAPI RAG service，以及必要时的 Nginx 入口配置。实际回答虽然正确描述了“浏览器 → Nginx → Uvicorn → FastAPI”的传统服务链路，但没有检索或整合当前项目中最关键的 GitHub Pages 与 Tailscale Funnel 层。因此，它在局部技术事实层面正确，却没有回答“这个项目”的完整架构。</p>
+<p>这说明了固定的 <code>top_k=3</code> 的普通chunk-level vector retrieval 对跨文档问题存在明显局限。或许在未来的改进中，我们应该要增强这方面的灵活程度。</p>
+<ol>
+<li><strong>全局性评价类问题不足</strong></li>
+</ol>
+<p>目前的两个 regression cases 中， RAG v1的表现都不太好。这第二个 regression case （第 10 题）中，我们能看出系统只检索到 changelog.md 与 mkdocs.md，因此只能对更新记录、基础站点结构做有限观察，并正确拒绝对“整个文档站质量”下完整结论。……这不是文档站本身质量的问题，而是 query 的范围超过了单次局部 chunk retrieval 的表达能力。要评价整个站点，retrieval 至少应能覆盖首页、目录结构和多个具有代表性的技术章节；当前 v1 没有这类站点级或文档级视角。</p>
+<ol>
+<li><strong>Source attribution 仍可能不准确</strong></li>
+</ol>
+<p>部分回答的内容与展示来源并不完全一致。例如，第 3 题的回答使用了 Nginx 转发配置相关事实，但返回 sources 为 git.md 与 fastapi.md；第 9 题则为作者信息问题返回了无关文档。这意味着，v1 的 sources 目前表示“被检索到的文档来源”，不等于“最终回答中每一句事实的精确引用”。因此，source chip 已可用于帮助用户回到相关文档，但暂不应被理解为严格的 sentence-level citation。在下个版本中，应该要做这方面的强化。</p>
+<h3 id="3-rag-v1">3. RAG v1 总结</h3>
+<p>第一轮 evaluation，我们能粗略地得到以下结论：</p>
+<ul>
+<li>single-document factual retrieval：基本可靠</li>
+<li>missing knowledge / false premise abstention：表现良好</li>
+<li>casual conversation：会触发无意义 retrieval</li>
+<li>cross-document synthesis：不足</li>
+<li>global document understanding：不足</li>
+<li>source attribution：仍可能包含弱相关或不准确来源</li>
+<li>corpus coverage：当前不包含作者信息，也未覆盖 PDF、代码等其他资料类型</li>
+</ul>
+<p>因此，RAG v1 已达到【面向工程文档的最小可用问答服务】目标：能够回答多数局部文档问题，也能在证据不足时拒答。但它尚不适合处理站点级总结、复杂跨文档架构说明或需要精确来源追踪的问题。</p>
+<p>故此，我们会对这次 evaluation 的部分 benchmark 问题进行保留，在下一轮 RAG v2 的evaluation 中继续使用这些问题进行测试和改进：尤其是 跨文档综合、全局性评价类问题以及 source attribution 的相关测试。当然，这次测试的还是有相当多的不足的。即benchmark 的问题设计还是较少，缺少组次覆盖和多样性（比如准备30个问题，3组10问），未来需要在问题设计上进一步丰富。</p>
+<p>以下方向是基于本轮 evaluation 得出可能改进，或许在将来的迭代会解决这些问题。</p>
+<ul>
+<li>Query routing：将闲聊、简单问候与知识库查询区分开，避免无意义 retrieval；</li>
+<li>Similarity threshold：当检索结果相关性过低时，不强行注入 context 或展示 sources；</li>
+<li>Metadata filtering：利用文档类型、主题或目录层级限制检索范围；</li>
+<li>Document summary：为每篇文档建立简短摘要，辅助回答跨 chunk、跨段落的问题；</li>
+<li>Hierarchical retrieval：先检索相关文档，再在文档内部检索具体 chunk，以改善全局与跨文档问题；</li>
+<li>Corpus expansion：在明确边界和权限后，逐步纳入 README、代码、PDF 或其他项目资料，并为作者等站点级信息提供明确来源；</li>
+<li>Citation refinement：将当前文档级 source attribution 进一步改进为更接近回答事实的引用关系。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
